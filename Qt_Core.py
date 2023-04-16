@@ -169,4 +169,5 @@ class QT_Toast(QT_Menu):
 		timer = QTimer()
 		timer.timeout.connect(self.close)
 		timer.start(750)
+		self.setWindowIcon(QIcon(""))
 		self.exec(Position)

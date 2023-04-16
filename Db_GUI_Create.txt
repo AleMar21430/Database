@@ -28,6 +28,7 @@ Descripción|descripcion
 -
 +Examen|examen
 ID del Paciente|paciente_id
+Nombre del Paciente|nombre
 -
 +Enfermedad|enfermedad
 ID del Paciente|paciente_id

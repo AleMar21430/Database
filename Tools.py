@@ -46,6 +46,7 @@ class Outliner_Tool(QT_Tree):
 		except sqlite3.Error as Error: 
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
+		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
 		cur.close()
 		conn.close()
 
@@ -67,12 +68,50 @@ class Outliner_Tool(QT_Tree):
 						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
 
 class Premade_Outliner_Tool(QT_Tree):
-	def __init__(self, Log: QT_Text_Stream, Output: QT_Spreadsheet):
+	def __init__(self, Log: QT_Text_Stream, Output: "Output_Tool"):
 		super().__init__()
 		self.Log = Log
 		self.Output = Output
-
+		
+		self.setTree()
 		self.itemDoubleClicked.connect(self.itemSelect)
+
+	def itemSelect(self, item):
+		self.Log.append(f"{item.Display_Name} | {item.Query} | {item.Database_Name} | {item.Table_Name}","250,250,250")
+		self.commit(item)
+
+	def commit(self, Item):
+		conn = sqlite3.connect("neurochama.db")
+		cur = conn.cursor()
+		try:
+			cur.execute(Item.Query)
+			conn.commit()
+			self.Data = cur.fetchall()
+			Coulmn_Labels = [str(desc[0]) for desc in cur.description]
+			self.Output.Set = True
+			self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
+			self.Output.Spreadsheet.setRowCount(len(self.Data))
+			self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
+			self.Output.Query = Item.Query
+
+			for row in range(len(self.Data)):
+				for column in range(len(self.Data[0])):
+					item = QTableWidgetItem(self.Data[row][column])
+					self.Output.Spreadsheet.setItem(row, column, item)
+
+			self.Output.Spreadsheet.resizeColumnsToContents()
+			self.Output.Spreadsheet.resizeRowsToContents()
+			self.Output.Set = False
+
+		except sqlite3.Error as Error: 
+			self.Log.append("Error: " + str(Error),"250,50,50")
+
+		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+		cur.close()
+		conn.close()
+
+	def setTree(self):
+		QT_Tree_Item(self,"Pacientes en peligro","SELECT * FROM pacientes", "NULL","")
 
 	def itemSelect(self, item):
 		self.Log.append(item.Query)
@@ -100,7 +139,7 @@ class Input_Tool(QT_Linear_Contents):
 		Data = DB_cursor.fetchall()
 		Coulmn_Labels = [str(desc[0]) for desc in DB_cursor.description][1:] # Ignore PK id
 
-		self.Spreadsheet.setColumnCount(len(Coulmn_Labels)-1)
+		self.Spreadsheet.setColumnCount(len(Coulmn_Labels))
 		self.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
 		self.Columns = Coulmn_Labels
 		self.Spreadsheet.setRowCount(1)
@@ -144,6 +183,7 @@ class Input_Tool(QT_Linear_Contents):
 		except sqlite3.Error as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
+		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
 
 		DB_connector.close()
 		self.Output.refresh()

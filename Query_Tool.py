@@ -38,6 +38,7 @@ class Query_Tool(QT_Text_Editor):
 					self.Output.Spreadsheet.resizeRowsToContents()
 					self.Output.Set = False
 					self.Log.append("Query executed succesfully!","150,250,150")
+					self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 				except:
 					self.Output.refresh()
 
@@ -67,6 +68,7 @@ class Query_Tool(QT_Text_Editor):
 					self.Output.Spreadsheet.resizeColumnsToContents()
 					self.Output.Spreadsheet.resizeRowsToContents()
 					self.Log.append("Query Fragment executed succesfully!","150,250,150")
+					self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 				except:
 					self.Output.refresh()
 			except sqlite3.Error as Error: 

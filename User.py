@@ -8,7 +8,7 @@ class User_Window(QT_Window):
 		self.Log = Log_Tool()
 		Output = Output_Tool(self.Log)
 		Search = Search_Tool()
-		Premade_Outliner = Outliner_Tool(self.Log, Output)
+		Premade_Outliner = Premade_Outliner_Tool(self.Log, Output)
 		Outliner = Outliner_Tool(self.Log, Output)
 
 		Splitter = QT_Splitter(False)
@@ -25,10 +25,8 @@ class User_Window(QT_Window):
 		Splitter.addWidget(InputSplitter)
 		Splitter.addWidget(OutputSplitter)
 
-		Splitter.setStretchFactor(0,20)
-		Splitter.setStretchFactor(1,80)
-		OutputSplitter.setStretchFactor(0,95)
-		OutputSplitter.setStretchFactor(1,5)
+		Splitter.setSizes([20,80])
+		OutputSplitter.setSizes([100,0])
 
 		self.setCentralWidget(Splitter)
 		self.setWindowTitle("Neuro Chama")
