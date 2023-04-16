@@ -391,12 +391,12 @@ class Source_Editor_Tool(QT_Linear_Contents):
 
 	def save(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to SAVE THE PARAMETERS")
-		if Confirmation.exec() == QDialog.DialogCode.Accepted:
+		if Confirmation.exec() == QMessageBox.StandardButton.Yes:
 			open(self.Path,"w",encoding="utf-8").write(self.Text.toPlainText())
 			self.Log.append("File Saved","50,250,50")
 
 	def wipe(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")
-		if Confirmation.exec() == QDialog.DialogCode.Accepted:
+		if Confirmation.exec() == QMessageBox.StandardButton.Yes:
 			os.remove("neurochama.db")
 			self.Log.append("Database Wiped","250,50,50")

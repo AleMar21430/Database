@@ -74,6 +74,11 @@ class Main_Application(QT_Application):
 	def __init__(self):
 		super().__init__(sys.argv)
 
+		self.start()
+
+		sys.exit(self.exec())
+
+	def start(self):
 		conn = sqlite3.connect("neurochama.db")
 		cursor = conn.cursor()
 		for Queries in open("Db_Create.txt").read().split(";"):
@@ -84,8 +89,6 @@ class Main_Application(QT_Application):
 
 		self.Window = Signin_Window(self)
 		self.setStyleSheet(Style)
-
-		sys.exit(self.exec())
 
 	def signIn(self):
 		self.Window = Signin_Window(self)
