@@ -16,6 +16,7 @@ class Outliner_Tool(QT_Tree):
 		self.itemDoubleClicked.connect(self.itemSelect)
 
 	def itemSelect(self, item):
+		item.setExpanded(False)
 		self.Log.append(f"{item.Display_Name} | {item.Query} | {item.Database_Name} | {item.Table_Name}","250,250,250")
 		self.commit(item)
 
@@ -72,11 +73,12 @@ class Premade_Outliner_Tool(QT_Tree):
 		super().__init__()
 		self.Log = Log
 		self.Output = Output
-		
+
 		self.setTree()
 		self.itemDoubleClicked.connect(self.itemSelect)
 
-	def itemSelect(self, item):
+	def itemSelect(self, item:QT_Tree_Item):
+		item.setExpanded(False)
 		self.Log.append(f"{item.Display_Name} | {item.Query} | {item.Database_Name} | {item.Table_Name}","250,250,250")
 		self.commit(item)
 
@@ -92,6 +94,7 @@ class Premade_Outliner_Tool(QT_Tree):
 			self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
 			self.Output.Spreadsheet.setRowCount(len(self.Data))
 			self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
+			self.Output.Table_Name = Item.Table_Name
 			self.Output.Query = Item.Query
 
 			for row in range(len(self.Data)):
@@ -106,16 +109,26 @@ class Premade_Outliner_Tool(QT_Tree):
 		except sqlite3.Error as Error: 
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
-		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
 		cur.close()
 		conn.close()
 
 	def setTree(self):
-		QT_Tree_Item(self,"Pacientes en peligro","SELECT * FROM pacientes", "NULL","")
-
-	def itemSelect(self, item):
-		self.Log.append(item.Query)
-
+		with open("Db_GUI_Custom.txt", "r", encoding = "utf-8") as File:
+			for Tables in File.read().split("+"):
+				Table_Info = []
+				for Line in Tables.split("\n"):
+					try:
+						if Line[0] != "-":
+							Table_Info.append(Line)
+					except: pass
+				for i in range(len(Table_Info)):
+					if i == 0:
+						Parent = Table_Info[i].split('|')
+						exec(f"{Parent[0]} = QT_Tree_Item(self,'{Parent[0]}','{Parent[1]}')")
+					else:
+						Child = Table_Info[i].split('|')
+						exec(f"QT_Tree_Item({Parent[0]},'{Child[0]}','{Child[1]}')")
 
 class Log_Tool(QT_Text_Stream):
 	def __init__(self):

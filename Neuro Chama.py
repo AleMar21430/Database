@@ -41,6 +41,29 @@ QScrollBar::handle {
 QScrollBar::add-line, QScrollBar::sub-line {
 	background:transparent
 }
+QTreeWidget::branch:has-siblings:!adjoins-item {
+	border-image: url(vline.png) 0;
+}
+
+QTreeWidget::branch:has-siblings:adjoins-item {
+	border-image: url(branch-more.png) 0;
+}
+
+QTreeWidget::branch:!has-children:!has-siblings:adjoins-item {
+	border-image: url(branch-end.png) 0;
+}
+
+QTreeWidget::branch:has-children:!has-siblings:closed,
+QTreeWidget::branch:closed:has-children:has-siblings {
+	border-image: none;
+	image: url(branch-closed.png);
+}
+
+QTreeWidget::branch:open:has-children:!has-siblings,
+QTreeWidget::branch:open:has-children:has-siblings  {
+	border-image: none;
+	image: url(branch-open.png);
+}
 '''
 
 class Main_Application(QT_Application):

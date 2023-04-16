@@ -1,0 +1,4 @@
+Pacientes|SELECT * FROM paciente
+Pacientes en peligro|SELECT * FROM examen
+-
++Médicos|SELECT * FROM medico
