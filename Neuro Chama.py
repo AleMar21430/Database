@@ -64,6 +64,10 @@ QTreeWidget::branch:open:has-children:has-siblings  {
 	border-image: none;
 	image: url(branch-open.png);
 }
+QPlainTextEdit {
+	background:rgb(25,25,25);
+	color:rgb(200,250,250);
+}
 '''
 
 class Main_Application(QT_Application):

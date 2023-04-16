@@ -1,5 +1,6 @@
 ﻿from Qt_Core import *
 from Query_Tool import *
+import os
 
 class Search_Tool(QT_Line_Editor):
 	def __init__(self):
@@ -53,6 +54,68 @@ class Outliner_Tool(QT_Tree):
 
 	def setTree(self):
 		with open("Db_GUI_Create.txt", "r", encoding = "utf-8") as File:
+			for Tables in File.read().split("+"):
+				Table_Info = []
+				for Line in Tables.split("\n"):
+					try:
+						if Line[0] != "-":
+							Table_Info.append(Line)
+					except: pass
+				for i in range(len(Table_Info)):
+					if i == 0:
+						Parent = Table_Info[i].split('|')
+						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','SELECT * FROM {Parent[1]}','{Parent[1]}','{Parent[1]}')")
+					else:
+						Child = Table_Info[i].split('|')
+						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
+
+class Admin_Outliner_Tool(QT_Tree):
+	def __init__(self, Log: QT_Text_Stream, Output: "Output_Tool"):
+		super().__init__()
+		self.Log = Log
+		self.Output = Output
+
+		self.setTree()
+		self.itemDoubleClicked.connect(self.itemSelect)
+
+	def itemSelect(self, item):
+		item.setExpanded(False)
+		self.Log.append(f"{item.Display_Name} | {item.Query} | {item.Database_Name} | {item.Table_Name}","250,250,250")
+		self.commit(item)
+
+	def commit(self, Item):
+		conn = sqlite3.connect("neurochama.db")
+		cur = conn.cursor()
+		try:
+			cur.execute(Item.Query)
+			conn.commit()
+			self.Data = cur.fetchall()
+			Coulmn_Labels = [str(desc[0]) for desc in cur.description]
+			self.Output.Set = True
+			self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
+			self.Output.Spreadsheet.setRowCount(len(self.Data))
+			self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
+			self.Output.Table_Name = Item.Table_Name
+			self.Output.Query = Item.Query
+
+			for row in range(len(self.Data)):
+				for column in range(len(self.Data[0])):
+					item = QTableWidgetItem(self.Data[row][column])
+					self.Output.Spreadsheet.setItem(row, column, item)
+
+			self.Output.Spreadsheet.resizeColumnsToContents()
+			self.Output.Spreadsheet.resizeRowsToContents()
+			self.Output.Set = False
+
+		except sqlite3.Error as Error: 
+			self.Log.append("Error: " + str(Error),"250,50,50")
+
+		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
+		cur.close()
+		conn.close()
+
+	def setTree(self):
+		with open("Db_GUI_Admin_Create.txt", "r", encoding = "utf-8") as File:
 			for Tables in File.read().split("+"):
 				Table_Info = []
 				for Line in Tables.split("\n"):
@@ -173,6 +236,9 @@ class Input_Tool(QT_Linear_Contents):
 		self.Layout.setStretch(1,0)
 		self.Layout.setStretch(2,1)
 
+		self.Spreadsheet.resizeColumnsToContents()
+		self.Spreadsheet.resizeRowsToContents()
+
 		self.setWindowTitle("Input")
 		self.setWindowIcon(QIcon("Icon.jpg"))
 		self.showMaximized()
@@ -275,3 +341,62 @@ class Output_Tool(QT_Linear_Contents):
 
 		cur.close()
 		conn.close()
+
+class Source_Editor_Tool(QT_Linear_Contents):
+	def __init__(self, Log):
+		super().__init__()
+		self.Log = Log
+		self.Options = QComboBox()
+		Save = QT_Button()
+		Delete = QT_Button()
+		self.Text = QT_Text_Editor()
+
+		self.Options.addItem("DB_Creation")
+		self.Options.addItem("DB_Admin_Tree")
+		self.Options.addItem("DB_User_Tree")
+		self.Options.addItem("DB_User_Custom_Ops")
+		Save.setText("Save")
+		Delete.setText("Wipe Database")
+
+		Header = QT_Linear_Contents(False)
+
+		Header.Layout.addWidget(self.Options)
+		Header.Layout.addWidget(Save)
+		Header.Layout.addWidget(Delete)
+
+		self.Layout.addWidget(Header)
+		self.Layout.addWidget(self.Text)
+		self.Layout.setStretch(0,0)
+		self.Layout.setStretch(1,1)
+
+		self.Options.currentTextChanged.connect(self.changeSource)
+		Save.clicked.connect(self.save)
+		Delete.clicked.connect(self.wipe)
+
+		self.Path = "./Db_Create.txt"
+		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
+
+	def changeSource(self):
+		if self.Options.currentText() == "DB_Creation":
+			self.Path = "./Db_Create.txt"
+		elif self.Options.currentText() == "DB_Admin_Tree":
+			self.Path = "./Db_GUI_Admin_Create.txt"
+		elif self.Options.currentText() == "DB_User_Tree":
+			self.Path = "./Db_GUI_Create.txt"
+		elif self.Options.currentText() == "DB_User_Custom_Ops":
+			self.Path = "./Db_GUI_Custom.txt"
+
+		self.Text.clear()
+		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
+
+	def save(self):
+		Confirmation = QT_Confirmation(self,"Are you sure you want to SAVE THE PARAMETERS")
+		if Confirmation.exec() == QDialog.DialogCode.Accepted:
+			open(self.Path,"w",encoding="utf-8").write(self.Text.toPlainText())
+			self.Log.append("File Saved","50,250,50")
+
+	def wipe(self):
+		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")
+		if Confirmation.exec() == QDialog.DialogCode.Accepted:
+			os.remove("neurochama.db")
+			self.Log.append("Database Wiped","250,50,50")

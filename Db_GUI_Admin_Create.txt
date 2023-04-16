@@ -84,3 +84,9 @@ ID del Médico Tratante|medico_id
 ID del Paciente|paciente_id
 ID del Centro de Salud|centro_salud_id
 -
++Credenciales|credenciales
+ID|id
+Usuario|usuario
+Contraseña|contrasenia
+Tipo|tipo
+-

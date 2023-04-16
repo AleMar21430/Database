@@ -53,7 +53,7 @@ class QT_Spreadsheet(QTableWidget):
 		super().verticalHeader().setObjectName("borderless")
 		super().horizontalHeader().setObjectName("borderless")
 
-class QT_Text_Editor(QTextEdit):
+class QT_Text_Editor(QPlainTextEdit):
 	def __init__(self):
 		super().__init__()
 		super().setContentsMargins(0,0,0,0)
@@ -171,3 +171,9 @@ class QT_Toast(QT_Menu):
 		timer.start(750)
 		self.setWindowIcon(QIcon(""))
 		self.exec(Position)
+
+class QT_Confirmation(QMessageBox):
+	def __init__(self, parent, Title):
+		super().__init__(parent)
+		self.setText(Title)
+		self.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
