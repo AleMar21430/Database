@@ -13,4 +13,14 @@ GROUP BY hm.diagnostico, hm.status
 ORDER BY COUNT(hm.diagnostico)
 LIMIT 10;
 ~
+Medicinas por vencer|
+SELECT cs.nombre, cs.localizacion, m.nombre, i.cantidad_existencias, ROUND(i.cantidad_existencias * 0.15, 2) AS porcentaje, i.porcentaje_por_vencer AS cantidad_a_vencer
+FROM inventario i
+INNER JOIN medicamento m
+ON i.medicamento_id = m.id
+INNER JOIN centro_salud cs
+ON i.centro_salud_id = cs.id
+WHERE ROUND(i.cantidad_existencias * 0.15, 2) <= 15
+ORDER BY i.cantidad_existencias ASC
+~
 -
