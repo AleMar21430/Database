@@ -388,7 +388,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		if self.Options.currentText() == "DB_Creation":
 			self.Path = "./Db_Create.txt"
 		elif self.Options.currentText() == "DB_Admin_Tree":
-			self.Path = "./Db_GUI_Admin_Create.txt"
+			self.Path = "./Db_GUI_Create.txt"
 		elif self.Options.currentText() == "DB_User_Tree":
 			self.Path = "./Db_GUI_Create.txt"
 		elif self.Options.currentText() == "DB_User_Custom_Ops":
@@ -396,6 +396,14 @@ class Source_Editor_Tool(QT_Linear_Contents):
 
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
+		self.Text.appendPlainText('''
+		+Credenciales|credenciales
+		ID|id
+		Usuario|usuario
+		Contraseña|contrasenia
+		Tipo|tipo
+		-
+		''')
 
 	def save(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to SAVE THE PARAMETERS")
