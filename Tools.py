@@ -193,7 +193,7 @@ class Premade_Outliner_Tool(QT_Tree):
 				for i in range(len(Table_Info)):
 					if i == 0:
 						Parent = Table_Info[i].split('|')
-						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','{Parent[1]}')")
+						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','{Parent[2]}')")
 					else:
 						Child = Table_Info[i].split('|')
 						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','{Child[1]}')")
