@@ -84,7 +84,7 @@ ID del Médico Tratante|medico_id~
 ID del Paciente|paciente_id~
 ID del Centro de Salud|centro_salud_id~
 -
-+Historial Médico|bitacora_historial_medico~
++Bitácora|bitacora_historial_medico~
 ID|id~
 Acción|accion~
 Fecha y Hora|fecha_hora~

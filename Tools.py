@@ -2,6 +2,7 @@
 from Query_Tool import *
 import psycopg2
 from psycopg2 import extensions
+import chardet
 
 class Search_Tool(QT_Line_Editor):
 	def __init__(self):
@@ -137,12 +138,6 @@ class Admin_Outliner_Tool(QT_Tree):
 	def setTree(self):
 		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
 			Pre = File.read()
-			Pre += '''+Credenciales|credenciales~
-ID|id~
-Usuario|usuario~
-Contraseña|contrasenia~
-Tipo|tipo~
--'''
 			for Tables in Pre.split("+"):
 				Table_Info = []
 				for Line in Tables.split("~"):
@@ -163,11 +158,12 @@ Tipo|tipo~
 						exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
 
 class Premade_Outliner_Tool(QT_Tree):
-	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
+	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool", Admin = False):
 		super().__init__()
 		self.App = App
 		self.Log = Log
 		self.Output = Output
+		self.Admin = Admin
 
 		self.setTree()
 		self.itemDoubleClicked.connect(self.itemSelect)
@@ -210,21 +206,23 @@ class Premade_Outliner_Tool(QT_Tree):
 		conn.close()
 
 	def setTree(self):
-		with open("./Database/Db_Queries.txt", "r", encoding = "utf-8") as File:
-			for Tables in File.read().split("+"):
-				Table_Info = []
-				for Line in Tables.split("~"):
-					if Line.strip() != "-":
-						Table_Info.append(Line.strip())
-				for i in range(len(Table_Info)):
-					if i == 0:
-						Parent = Table_Info[i].split('|')
-						Query = Parent[2].replace("\n", " ")
-						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','''{Query}''')")
-					else:
-						Child = Table_Info[i].split('|')
-						Query = Child[1].replace("\n", " ")
-						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','''{Query}''')")
+		File = open("./Database/Db_Queries.txt", "r", encoding = "utf-8").read()
+		if self.Admin:
+			File += open("./Database/Db_Admin.txt", "r", encoding = "utf-8").read()
+		for Tables in File.split("+"):
+			Table_Info = []
+			for Line in Tables.split("~"):
+				if Line.strip() != "-":
+					Table_Info.append(Line.strip())
+			for i in range(len(Table_Info)):
+				if i == 0:
+					Parent = Table_Info[i].split('|')
+					Query = Parent[2].replace("\n", " ")
+					exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','''{Query}''')")
+				else:
+					Child = Table_Info[i].split('|')
+					Query = Child[1].replace("\n", " ")
+					exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','''{Query}''')")
 
 class Log_Tool(QT_Text_Stream):
 	def __init__(self):
@@ -525,9 +523,10 @@ class Source_Editor_Tool(QT_Linear_Contents):
 	def restore(self):
 		Path = QFileDialog.getOpenFileName(self, "Restore from file","./dump.sql")
 		if Path != "":
-			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
+			conn = psycopg2.connect(database=self.Parent.App.DB, user=self.Parent.App.USER, password=self.Parent.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()
-			try: cur.execute(open(Path, 'r').read())
+
+			try: cur.execute(open(Path[0], "r",encoding=chardet.detect(open(Path[0], 'rb').read())["encoding"]).read())
 			except psycopg2.Error as Error: self.Log.append("Error: " + str(Error),"250,50,50")
 			conn.commit()
 			cur.close()

@@ -9,7 +9,7 @@ class Admin_Window(QT_Window):
 		self.Log = Log_Tool()
 		Output = Output_Tool(self.App, self.Log)
 		self.Outliner = Admin_Outliner_Tool(self.App, self.Log, Output)
-		self.Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log,Output)
+		self.Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log,Output,True)
 		Query = Query_Tool(self.App, self.Log, Output)
 		Source_Editor = Source_Editor_Tool(self, self.Log)
 
