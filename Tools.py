@@ -52,6 +52,9 @@ class Outliner_Tool(QT_Tree):
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
+		for row in range(self.Output.Spreadsheet.rowCount()):
+				item = self.Output.Spreadsheet.item(row, 0)
+				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 		cur.close()
 		conn.close()
 
@@ -70,7 +73,7 @@ class Outliner_Tool(QT_Tree):
 						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','SELECT * FROM {Parent[1]}','{Parent[1]}','{Parent[1]}')")
 					else:
 						Child = Table_Info[i].split('|')
-						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
+						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT id, {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
 
 class Admin_Outliner_Tool(QT_Tree):
 	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
@@ -117,6 +120,9 @@ class Admin_Outliner_Tool(QT_Tree):
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
+		for row in range(self.Output.Spreadsheet.rowCount()):
+				item = self.Output.Spreadsheet.item(row, 0)
+				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 		cur.close()
 		conn.close()
 
@@ -142,7 +148,7 @@ Tipo|tipo
 						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','SELECT * FROM {Parent[1]}','{Parent[1]}','{Parent[1]}')")
 					else:
 						Child = Table_Info[i].split('|')
-						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
+						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT id, {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
 
 class Premade_Outliner_Tool(QT_Tree):
 	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
@@ -188,6 +194,9 @@ class Premade_Outliner_Tool(QT_Tree):
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
+		for row in range(self.Output.Spreadsheet.rowCount()):
+				item = self.Output.Spreadsheet.item(row, 0)
+				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 		cur.close()
 		conn.close()
 
@@ -283,13 +292,16 @@ class Input_Tool(QT_Linear_Contents):
 				DB_cursor.execute(f"SELECT data_type FROM information_schema.columns WHERE table_name = '{self.Table_Name}' AND column_name = '{self.Coulmn_Labels[i]}'")
 				column_type.append(DB_cursor.fetchone()[0])
 			for i in range(len(column_type)):
-				if column_type[i] == "text" or column_type[i] == "varchar":
+				if column_type[i] == "text":
 					Info[i] = f"'{Info[i]}'"
 
 			DB_cursor.execute(f"INSERT INTO {self.Table_Name} ({','.join(self.Columns)}) VALUES ({','.join(Info)})")
 			DB_connector.commit()
 			
 			self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
+			for row in range(self.Output.Spreadsheet.rowCount()):
+				item = self.Output.Spreadsheet.item(row, 0)
+				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
 			DB_connector.close()
 			self.Output.refresh()
@@ -387,17 +399,20 @@ class Output_Tool(QT_Linear_Contents):
 	def removal(self):
 		self.Input = Delete_Tool(self.App, self, self.Table_Name, self.Log)
 
-
 	def updateDatabase(self, row, column):
 		if not self.Set:
 			DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			DB_cursor = DB_connector.cursor()
-
-			DB_cursor.execute(f'PRAGMA table_info({self.Table_Name})')
-			rows = DB_cursor.fetchall()
-			Column_Name = rows[column][1]
+			DB_cursor.execute(f"SELECT * FROM {self.Table_Name}")
+			Column_Name = self.Spreadsheet.horizontalHeaderItem(column).text()
+			print(Column_Name)
 			try:
-				DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = '{self.Spreadsheet.item(row,column).text()}' WHERE id = {self.Spreadsheet.item(row,0).text()}")
+				DB_cursor.execute(f"SELECT data_type FROM information_schema.columns WHERE table_name = '{self.Table_Name}' AND column_name = '{Column_Name}'")
+				column_type = DB_cursor.fetchone()[0]
+				if column_type == "text":
+					DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = '{self.Spreadsheet.item(row,column).text()}' WHERE id = {self.Spreadsheet.item(row,0).text()}")
+				else:
+					DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = {self.Spreadsheet.item(row,column).text()} WHERE id = {self.Spreadsheet.item(row,0).text()}")
 				DB_connector.commit()
 			except psycopg2.Error as Error:
 				self.Log.append("Error: " + str(Error),"250,50,50")
