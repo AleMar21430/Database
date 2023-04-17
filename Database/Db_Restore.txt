@@ -19,11 +19,22 @@ VALUES
 INSERT INTO paciente
 	(id,nombre,apellido,telefono,direccion,peso,altura,imc)
 VALUES
-	(1, 'Pancho', 'Sanchez', 12345678, 'Villa Nueva', 150, 160, 15),
-	(2, 'Juan', 'Fernandez', 12345677, 'Mixco', 135, 170, 17),
-	(3, 'Pepito', 'Gutierrez', 12345676, 'Antigua', 125, 162, 16),
-	(4, 'Mincho', 'El Chino', 12345675, 'Villa Nueva', 350, 160, 40),
-	(5, 'Miguel', 'Pako', 12345674, 'Jutiapa', 120, 150, 12);
+	(11, 'Pancho', 'Sanchez', 12345678, 'Villa Nueva', 150, 160, 15),
+	(12, 'Juan', 'Fernandez', 12345677, 'Mixco', 135, 170, 17),
+	(13, 'Pepito', 'Gutierrez', 12345676, 'Antigua', 125, 162, 16),
+	(14, 'Mincho', 'El Chino', 12345675, 'Villa Nueva', 350, 160, 40),
+	(15, 'Miguel', 'Pako', 12345674, 'Jutiapa', 120, 150, 12),
+	(1, 'Roberto', 'Castillo', 23543546, '12-10 zona 13, 2av', 25, 1.68, 20),
+	(2, 'Walter', 'Segura', 49563452, '10-5 zona 12, 5av', 49, 1.7, 19),
+	(3, 'Hugo', 'Paiz', 16731742, '6-8 zona 10, 9av', 95, 1.75, 25),
+	(4, 'Armando', 'Mesa', 17652493, '20-9 zona 5, 12av', 85, 1.67, 30),
+	(5, 'Marcos', 'pocasangre', 13427481, '15-8 zona 6, 6av', 80, 1.68, 24),
+	(6, 'Luis', 'Rigoberto', 16742374, '19-7 zona 12, 4av', 65, 1.65, 19),
+	(7, 'Andrés', 'Gonzales', 13426751, '14-5 zona 10, 3av', 69, 1.67, 20),
+	(8, 'Karen', 'Salazar', 81096956, '24-8 zona 17, 9av', 64, 1.82, 20),
+	(9, 'Rafael', 'Carrillo', 45317456, '12-7 zona 8, 6av', 79, 1.8, 25),
+	(10, 'William', 'Bolaños', 43215316, '21-9 zona 14, 4av', 94, 1.8, 27);
+
 
 INSERT INTO precedentes_paciente
 	(id,paciente_id,precedentes_enfermedad)
