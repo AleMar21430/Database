@@ -399,7 +399,6 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Path = "./Db_GUI_Custom.txt"
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
-		self.save()
 
 	def save(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to SAVE THE PARAMETERS")
