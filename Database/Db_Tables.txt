@@ -51,13 +51,12 @@ Organo Afectado|organo_afectado~
 ID|id~
 Nombre del Medicamento|nombre~
 Descripción|descripcion~
-ID de la Afección|affecion_id~
+ID de la Afección|afeccion_id~
 -
 +Centro de Salud|centro_salud~
 ID|id~
 Nombre del Centro|nombre~
 Localización|localizacion~
-ID del Medicamento|medicamento_id~
 -
 +Inventario|inventario~
 ID|id~

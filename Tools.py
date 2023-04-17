@@ -562,6 +562,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			conn.commit()
 			cur.close()
 			conn.close()
+			self.Log.append("Base de datos restaurada","50,250,50")
 	
 	def wipe(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")

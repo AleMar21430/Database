@@ -77,10 +77,7 @@ CREATE TABLE IF NOT EXISTS Medicamento(
 CREATE TABLE IF NOT EXISTS Centro_Salud(
 	id SERIAL PRIMARY KEY,
 	nombre TEXT,
-	localizacion TEXT,
-	medicamento_id INTEGER,
-	FOREIGN KEY (medicamento_id) REFERENCES Paciente (id) ON DELETE CASCADE
-	ON UPDATE CASCADE
+	localizacion TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Inventario(
