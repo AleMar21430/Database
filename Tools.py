@@ -175,35 +175,36 @@ class Premade_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
-		cur = conn.cursor()
-		try:
-			cur.execute(Item.Query)
-			conn.commit()
-			self.Data = cur.fetchall()
-			Coulmn_Labels = [str(desc[0]) for desc in cur.description]
-			self.Output.Set = True
-			self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
-			self.Output.Spreadsheet.setRowCount(len(self.Data))
-			self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
-			self.Output.Table_Name = Item.Table_Name
-			self.Output.Query = Item.Query
+		if Item.Query != "Pass":
+			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
+			cur = conn.cursor()
+			try:
+				cur.execute(Item.Query)
+				conn.commit()
+				self.Data = cur.fetchall()
+				Coulmn_Labels = [str(desc[0]) for desc in cur.description]
+				self.Output.Set = True
+				self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
+				self.Output.Spreadsheet.setRowCount(len(self.Data))
+				self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
+				self.Output.Table_Name = Item.Table_Name
+				self.Output.Query = Item.Query
 
-			for row in range(len(self.Data)):
-				for column in range(len(self.Data[0])):
-					item = QTableWidgetItem(str(self.Data[row][column]))
-					self.Output.Spreadsheet.setItem(row, column, item)
+				for row in range(len(self.Data)):
+					for column in range(len(self.Data[0])):
+						item = QTableWidgetItem(str(self.Data[row][column]))
+						self.Output.Spreadsheet.setItem(row, column, item)
 
-			self.Output.Spreadsheet.resizeColumnsToContents()
-			self.Output.Spreadsheet.resizeRowsToContents()
-			self.Output.Set = False
+				self.Output.Spreadsheet.resizeColumnsToContents()
+				self.Output.Spreadsheet.resizeRowsToContents()
+				self.Output.Set = False
 
-		except psycopg2.Error as Error:
-			self.Log.append("Error: " + str(Error),"250,50,50")
+			except psycopg2.Error as Error:
+				self.Log.append("Error: " + str(Error),"250,50,50")
 
-		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-		cur.close()
-		conn.close()
+			self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+			cur.close()
+			conn.close()
 
 	def setTree(self):
 		File = open("./Database/Db_Queries.txt", "r", encoding = "utf-8").read()

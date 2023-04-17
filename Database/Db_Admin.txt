@@ -4,3 +4,13 @@ Usuario|SELECT usuario FROM credenciales~
 Contraseña|SELECT contrasenia FROM credenciales~
 Tipo|SELECT tipo FROM credenciales~
 -
++Reportes de Administrador|rep_admin|Pass~
+Top 10 Enfermedades más mortales|
+SELECT hm.diagnostico, COUNT(hm.diagnostico) AS cantidad_casos, hm.status
+FROM historial_medico  hm
+WHERE LOWER(hm.status) = 'fallecido'
+GROUP BY hm.diagnostico, hm.status
+ORDER BY COUNT(hm.diagnostico)
+LIMIT 10;
+~
+-
