@@ -31,9 +31,7 @@ class Admin_Window(QT_Window):
 		VOutputSplitter.addWidget(Source_Editor)
 		Splitter.addWidget(VOutputSplitter)
 
-		Splitter.setStretchFactor(0,20)
-		Splitter.setStretchFactor(1,15)
-		Splitter.setStretchFactor(2,65)
+		Splitter.setSizes([500,500,2000])
 		VSplitter.setStretchFactor(0,65)
 		VSplitter.setStretchFactor(1,35)
 		VOutputSplitter.setSizes([2000,1000])

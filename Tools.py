@@ -473,6 +473,8 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		self.Options.addItem("DB_Tree")
 		self.Options.addItem("DB_Queries")
 		self.Options.addItem("DB_Triggers")
+		self.Options.addItem("DB_Admin")
+		self.Options.addItem("DB_Restore")
 
 		Header = QT_Linear_Contents(False)
 
@@ -507,6 +509,10 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Path = "./Database/Db_Queries.txt"
 		elif self.Options.currentText() == "DB_Triggers":
 			self.Path = "./Database/Db_Triggers.txt"
+		elif self.Options.currentText() == "DB_Admin":
+			self.Path = "./Database/Db_Admin.txt"
+		elif self.Options.currentText() == "DB_Restore":
+			self.Path = "./Database/Db_Restore.txt"
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 
