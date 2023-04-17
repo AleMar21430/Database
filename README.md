@@ -6,4 +6,5 @@ PostgreSQL 15 Server : [Postgre SQL Download](https://www.postgresql.org/downloa
 ```
 pip install pyside6
 pip install psycopg2
+pip install chardet
 ```
