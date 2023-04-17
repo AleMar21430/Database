@@ -86,10 +86,19 @@ class Main_Application(QT_Application):
 			self.PASSWORD = "123"
 			conn = psycopg2.connect(database=self.DB, user=self.USER, password=self.PASSWORD, host="localhost", port="5432")
 			cursor = conn.cursor()
+
+			autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
+			conn.set_isolation_level( autocommit )
+
 			for Queries in open("./Database/Db_Create.txt").read().split(";"):
 				try: cursor.execute(Queries)
 				except psycopg2.Error as Error: print(Error)
 			conn.commit()
+
+			try: cursor.execute(open("./Database/Db_Info.txt").read())
+			except psycopg2.Error as Error: print(Error)
+			conn.commit()
+
 			cursor.close()
 			conn.close()
 			try: self.Window.close()

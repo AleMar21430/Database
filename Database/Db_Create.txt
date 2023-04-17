@@ -125,6 +125,18 @@ CREATE TABLE IF NOT EXISTS Historial_Medico(
 	ON UPDATE CASCADE
 );
 
+CREATE TABLE bitacora_historial_medico (
+	id SERIAL PRIMARY KEY,
+	accion TEXT NOT NULL,
+	fecha_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	tabla_afectada TEXT NOT NULL,
+	id_afectado INT,
+	columna_afectada TEXT,
+	valor_anterior TEXT,
+	valor_nuevo TEXT,
+	usuario TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS Credenciales (
 	id SERIAL PRIMARY KEY UNIQUE,
 	usuario TEXT UNIQUE,
