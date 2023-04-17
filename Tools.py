@@ -271,7 +271,7 @@ class Input_Tool(QT_Linear_Contents):
 					Data.append(self.Spreadsheet.item(0,i).text())
 				
 			except:
-				Data.append("None")
+				Data.append("null")
 
 		try:
 			column_type = []
