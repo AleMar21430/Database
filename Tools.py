@@ -217,7 +217,7 @@ class Input_Tool(QT_Linear_Contents):
 		self.Log = Log
 		self.Table_Name = Table_Name
 		self.Spreadsheet = QT_Spreadsheet()
-		DB_connector = psycopg2.connect('neurochama.db')
+		DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 		DB_cursor = DB_connector.cursor()
 
 		try:
@@ -257,7 +257,7 @@ class Input_Tool(QT_Linear_Contents):
 		self.showMaximized()
 
 	def commit(self):
-		DB_connector = psycopg2.connect('neurochama.db')
+		DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 		DB_cursor = DB_connector.cursor()
 
 		Data = []
@@ -313,7 +313,7 @@ class Output_Tool(QT_Linear_Contents):
 
 	def updateDatabase(self, row, column):
 		if not self.Set:
-			DB_connector = psycopg2.connect('neurochama.db')
+			DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			DB_cursor = DB_connector.cursor()
 
 			DB_cursor.execute(f'PRAGMA table_info({self.Table_Name})')
@@ -363,20 +363,17 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		self.Log = Log
 		self.Options = QComboBox()
 		Save = QT_Button()
-		Delete = QT_Button()
 		self.Text = QT_Text_Editor()
 
 		self.Options.addItem("DB_Creation_Queries")
 		self.Options.addItem("DB_Tree")
 		self.Options.addItem("DB_Queries")
 		Save.setText("Save")
-		Delete.setText("Wipe Database")
 
 		Header = QT_Linear_Contents(False)
 
 		Header.Layout.addWidget(self.Options)
 		Header.Layout.addWidget(Save)
-		#Header.Layout.addWidget(Delete)
 
 		self.Layout.addWidget(Header)
 		self.Layout.addWidget(self.Text)
@@ -385,7 +382,6 @@ class Source_Editor_Tool(QT_Linear_Contents):
 
 		self.Options.currentTextChanged.connect(self.changeSource)
 		Save.clicked.connect(self.save)
-		Delete.clicked.connect(self.wipe)
 
 		self.Path = "./Db_Create.txt"
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
@@ -409,9 +405,3 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Parent.Outliner.setTree()
 			self.Parent.Premade_Outliner.clear()
 			self.Parent.Premade_Outliner.setTree()
-
-	def wipe(self):
-		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")
-		if Confirmation.exec() == QMessageBox.StandardButton.Yes:
-			os.remove("neurochama.db")
-			self.Log.append("Database Wiped","250,50,50")
