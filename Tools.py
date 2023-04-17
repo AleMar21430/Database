@@ -20,6 +20,7 @@ class Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item):
 		self.Output.Add_Button.show()
+		self.Output.Remove_Button.show()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -83,6 +84,7 @@ class Admin_Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item):
 		self.Output.Add_Button.show()
+		self.Output.Remove_Button.show()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -154,6 +156,7 @@ class Premade_Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item:QT_Tree_Item):
 		self.Output.Add_Button.hide()
+		self.Output.Remove_Button.hide()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -300,6 +303,57 @@ class Input_Tool(QT_Linear_Contents):
 		self.deleteLater()
 		self.destroy()
 
+class Delete_Tool(QT_Linear_Contents):
+	def __init__(self, App, Output, Table_Name, Log):
+		super().__init__()
+		self.App = App
+		self.Output = Output
+		self.Log = Log
+		self.Table_Name = Table_Name
+		
+		self.Id = QT_Line_Editor()
+		self.Id.setPlaceholderText("ID")
+
+		Remove_Button = QT_Button()
+		Remove_Button.setText("Remove Item")
+		Remove_Button.clicked.connect(self.commit)
+		self.Cancel_Button = QT_Button()
+		self.Cancel_Button.setText("Cancel")
+		self.Cancel_Button.clicked.connect(self.quit)
+
+		self.Layout.addWidget(Remove_Button)
+		self.Layout.addWidget(self.Cancel_Button)
+		self.Layout.addWidget(self.Id)
+		self.Layout.setStretch(0,0)
+		self.Layout.setStretch(1,0)
+		self.Layout.setStretch(2,0)
+
+
+		self.setWindowTitle("Input")
+		self.setWindowIcon(QIcon("./Resources/Icon.jpg"))
+		self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.CustomizeWindowHint)
+		self.show()
+		self.setGeometry(QRect(self.Output.mapToGlobal(self.Output.geometry().topLeft()),QSize(150, 80)))
+
+	def commit(self):
+		DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
+		DB_cursor = DB_connector.cursor()
+
+		try:
+			DB_cursor.execute(f"DELETE FROM {self.Table_Name} WHERE id = {self.Id.text()}")
+			DB_connector.commit()
+		except psycopg2.Error as Error:
+			self.Log.append("Error: " + str(Error),"250,50,50")
+
+		DB_connector.close()
+		self.Output.refresh()
+		self.quit()
+
+	def quit(self):
+		self.close()
+		self.deleteLater()
+		self.destroy()
+
 class Output_Tool(QT_Linear_Contents):
 	def __init__(self, App, Log):
 		self.App = App
@@ -311,18 +365,28 @@ class Output_Tool(QT_Linear_Contents):
 		self.Set = True
 		self.Add_Button = QT_Button()
 		self.Add_Button.setText("Add Item")
+		self.Remove_Button = QT_Button()
+		self.Remove_Button.setText("Remove Item")
 
 		self.Layout.addWidget(self.Add_Button)
+		self.Layout.addWidget(self.Remove_Button)
 		self.Layout.addWidget(self.Spreadsheet)
 		self.Layout.setStretch(0,0)
-		self.Layout.setStretch(1,1)
+		self.Layout.setStretch(1,0)
+		self.Layout.setStretch(2,1)
 
 		self.Spreadsheet.cellChanged.connect(self.updateDatabase)
 		self.Add_Button.clicked.connect(self.input)
+		self.Remove_Button.clicked.connect(self.removal)
+		self.Remove_Button.hide()
 		self.Add_Button.hide()
 
 	def input(self):
 		self.Input = Input_Tool(self.App, self, self.Table_Name, self.Log)
+
+	def removal(self):
+		self.Input = Delete_Tool(self.App, self, self.Table_Name, self.Log)
+
 
 	def updateDatabase(self, row, column):
 		if not self.Set:
