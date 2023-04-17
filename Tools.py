@@ -192,18 +192,18 @@ class Premade_Outliner_Tool(QT_Tree):
 		with open("Db_GUI_Custom.txt", "r", encoding = "utf-8") as File:
 			for Tables in File.read().split("+"):
 				Table_Info = []
-				for Line in Tables.split("\n"):
-					try:
-						if Line[0] != "-":
-							Table_Info.append(Line)
-					except: pass
+				for Line in Tables.split("~"):
+					if Line.strip() != "-":
+						Table_Info.append(Line.strip())
 				for i in range(len(Table_Info)):
 					if i == 0:
 						Parent = Table_Info[i].split('|')
-						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','{Parent[2]}')")
+						Query = Parent[2].replace("\n", " ")
+						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','''{Query}''')")
 					else:
 						Child = Table_Info[i].split('|')
-						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','{Child[1]}')")
+						Query = Child[1].replace("\n", " ")
+						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','''{Query}''')")
 
 class Log_Tool(QT_Text_Stream):
 	def __init__(self):

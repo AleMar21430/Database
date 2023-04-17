@@ -1,7 +1,13 @@
-Pacientes|pacientes|SELECT * FROM paciente
-Informacion Completa Paciente|SELECT * FROM paciente
+Pacientes|pacientes|SELECT * FROM paciente~
+Informacion Completa Paciente|SELECT * FROM paciente~
 -
-+Medicamentos|medicamentos|SELECT * FROM medicamento
-Medicamentos por vencer|SELECT * FROM medicamento
++Medicamentos|medicamentos|SELECT * FROM medicamento~
+Medicamentos por vencer|SELECT * FROM medicamento~
 -
-+Test|test|SELECT Q1.nombre, Q2.nombre, Q2.apellido from ( select * from cirugia ) as Q1 join ( select * from paciente ) as Q2 on Q1.paciente_id = Q2.id
++Test|test|
+SELECT Q1.nombre, Q2.nombre, Q2.apellido
+from ( select * from cirugia ) as Q1
+join ( select * from paciente ) as Q2
+on Q1.paciente_id = Q2.id
+~
+-
