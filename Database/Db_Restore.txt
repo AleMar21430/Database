@@ -1,9 +1,20 @@
 INSERT INTO medico
 	(id,nombre,apellido,telefono,direccion,numero_colegiado,especialidad)
 VALUES
-	(1,'Alejandro', 'Martinez', 21430, 'Mi casa', 21430, 'pyqt'),
-	(2,'Samuel', 'Argueta', 211024, 'Su casa', 211024, 'postgre'),
-	(3,'Andres', 'Chivalan', 21534, 'Su casa', 21534, 'postgre');
+	(1, 'Alejandro', 'Martinez', 21430, 'Mi casa', 21430, 'pyqt'),
+	(2, 'Samuel', 'Argueta', 211024, 'Su casa', 211024, 'postgre'),
+	(3, 'Andres', 'Chivalan', 21534, 'Su casa', 21534, 'postgre'),
+	(15, 'Guillermo', 'Torres', 99157617, '17-9, 7c, Zona, 11', 268675143, 'Cardiologo'),
+	(18, 'Gustavo', 'Montenegro', 90772376, '20-5, 21av, Zona, 16', 444876363, 'Anestesiología'),
+	(23, 'Alverto', 'Aguilar', 96178436, '13, calle, zona, 9, mixco', 560556724, 'Angiología y Cirugía Vascular, y Endovascular'),
+	(36, 'Marcos', 'Costa', 9473172, '8, calle, zona, 14', 960796197, 'Dermatología'),
+	(38, 'Luis', 'Guillermo', 31993278, ', 7, avenida, zona, 13', 587530754, 'Gastroenterología'),
+	(49, 'Javier', 'Herrera', 48732622, '23, avenida, zona, 6', 744791007, 'Hematología'),
+	(55, 'Pablo', 'Carrera', 25184426, '25-10, 6, avenida, zona, 9', 189633218, 'Nefrología'),
+	(68, 'Diego', 'Vergara', 57816159, '17-6, 13, calle, zona, 6', 268675143, 'Neumología'),
+	(69, 'Luisa', 'Hernández', 9859617, '6, avenida, zona, 1, mixco', 612898686, 'Oftalmología'),
+	(74, 'Marta', 'Torres', 56321729, '30-5, 8, avenida, zona, 3', 290288218, 'torrinolaringología');
+
 
 INSERT INTO paciente
 	(id,nombre,apellido,telefono,direccion,peso,altura,imc)
