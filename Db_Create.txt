@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Medico(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	nombre TEXT NOT NULL,
 	apellido TEXT NOT NULL,
 	telefono TEXT,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS Medico(
 );
 
 CREATE TABLE IF NOT EXISTS Paciente(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	nombre TEXT NOT NULL,
 	apellido TEXT NOT NULL,
 	telefono TEXT,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Paciente(
 );
 
 CREATE TABLE IF NOT EXISTS Precedentes_Paciente(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	paciente_id INTEGER,
 	precedentes_enfermedad TEXT,
 	FOREIGN KEY (paciente_id) REFERENCES Paciente (id) ON DELETE CASCADE
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS Precedentes_Paciente(
 );
 
 CREATE TABLE IF NOT EXISTS Adiccion(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	paciente_id INTEGER,
 	nombre TEXT,
 	descripcion TEXT,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Adiccion(
 );
 
 CREATE TABLE IF NOT EXISTS Examen(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	paciente_id INTEGER,
 	nombre TEXT,
 	FOREIGN KEY (paciente_id) REFERENCES Paciente (id) ON DELETE CASCADE
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Examen(
 );
 
 CREATE TABLE IF NOT EXISTS Enfermedad(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	paciente_id INTEGER,
 	nombre TEXT,
 	FOREIGN KEY (paciente_id) REFERENCES Paciente (id) ON DELETE CASCADE
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS Enfermedad(
 );
 
 CREATE TABLE IF NOT EXISTS Cirugia(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	paciente_id INTEGER,
 	nombre TEXT,
 	FOREIGN KEY (paciente_id) REFERENCES Paciente (id) ON DELETE CASCADE
@@ -61,12 +61,12 @@ CREATE TABLE IF NOT EXISTS Cirugia(
 );
 
 CREATE TABLE IF NOT EXISTS Afeccion(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	organo_afectado TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Medicamento(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	nombre TEXT,
 	descripcion TEXT,
 	afeccion_id INTEGER,
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS Medicamento(
 );
 
 CREATE TABLE IF NOT EXISTS Centro_Salud(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	nombre TEXT,
 	localizacion TEXT,
 	medicamento_id INTEGER,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS Centro_Salud(
 );
 
 CREATE TABLE IF NOT EXISTS Inventario(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	centro_salud_id INTEGER,
 	medicamento_id INTEGER,
 	porcentaje_por_vencer INTEGER NULL,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS Inventario(
 );
 
 CREATE TABLE IF NOT EXISTS Trabajo(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	fecha_entarada DATE NOT NULL,
 	fecha_salida DATE NULL,
 	medico_id INTEGER,
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS Trabajo(
 );
 
 CREATE TABLE IF NOT EXISTS Historial_Medico(
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	fecha DATE NOT NULL,
 	diagnostico TEXT,
 	tratamiento TEXT,
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS Historial_Medico(
 );
 
 CREATE TABLE IF NOT EXISTS Credenciales (
-	id INTEGER PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	usuario TEXT,
 	contrasenia TEXT,
 	tipo TEXT
