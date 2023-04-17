@@ -2,5 +2,5 @@
 # Requirements
 ```
 pip install pyside6
-pip install sqlite
+pip install pysqlite
 ```
