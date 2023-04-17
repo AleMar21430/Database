@@ -151,7 +151,7 @@ class Premade_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
 			cur.execute(Item.Query)
