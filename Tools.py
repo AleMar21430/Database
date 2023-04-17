@@ -515,7 +515,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Parent.Premade_Outliner.setTree()
 
 	def restore(self):
-		Path = QFileDialog.getOpenFileName(self, "Restore from file","./")
+		Path = QFileDialog.getOpenFileName(self, "Restore from file","./dump.sql")
 		if Path != "":
 			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()
