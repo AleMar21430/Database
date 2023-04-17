@@ -19,6 +19,7 @@ class Outliner_Tool(QT_Tree):
 		self.itemDoubleClicked.connect(self.itemSelect)
 
 	def itemSelect(self, item):
+		self.Output.Add_Button.show()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -81,6 +82,7 @@ class Admin_Outliner_Tool(QT_Tree):
 		self.itemDoubleClicked.connect(self.itemSelect)
 
 	def itemSelect(self, item):
+		self.Output.Add_Button.show()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -151,6 +153,7 @@ class Premade_Outliner_Tool(QT_Tree):
 		self.itemDoubleClicked.connect(self.itemSelect)
 
 	def itemSelect(self, item:QT_Tree_Item):
+		self.Output.Add_Button.hide()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -306,16 +309,17 @@ class Output_Tool(QT_Linear_Contents):
 		self.Table_Name = ""
 		self.Query = ""
 		self.Set = True
-		Add_Button = QT_Button()
-		Add_Button.setText("Add Item")
+		self.Add_Button = QT_Button()
+		self.Add_Button.setText("Add Item")
 
-		self.Layout.addWidget(Add_Button)
+		self.Layout.addWidget(self.Add_Button)
 		self.Layout.addWidget(self.Spreadsheet)
 		self.Layout.setStretch(0,0)
 		self.Layout.setStretch(1,1)
 
 		self.Spreadsheet.cellChanged.connect(self.updateDatabase)
-		Add_Button.clicked.connect(self.input)
+		self.Add_Button.clicked.connect(self.input)
+		self.Add_Button.hide()
 
 	def input(self):
 		self.Input = Input_Tool(self.App, self, self.Table_Name, self.Log)
