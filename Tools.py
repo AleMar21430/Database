@@ -1,6 +1,7 @@
 ﻿from Qt_Core import *
 from Query_Tool import *
 import os
+import psycopg2
 
 class Search_Tool(QT_Line_Editor):
 	def __init__(self):
@@ -22,7 +23,7 @@ class Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = sqlite3.connect("neurochama.db") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
 			cur.execute(Item.Query)
@@ -45,7 +46,7 @@ class Outliner_Tool(QT_Tree):
 			self.Output.Spreadsheet.resizeRowsToContents()
 			self.Output.Set = False
 
-		except sqlite3.Error as Error: # except psycopg2.Error
+		except psycopg2.Error as Error: # except psycopg2.Error
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -84,7 +85,7 @@ class Admin_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = sqlite3.connect("neurochama.db") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 
 		cur = conn.cursor()
 		try:
@@ -108,7 +109,7 @@ class Admin_Outliner_Tool(QT_Tree):
 			self.Output.Spreadsheet.resizeRowsToContents()
 			self.Output.Set = False
 
-		except sqlite3.Error as Error: # except psycopg2.Error
+		except psycopg2.Error as Error: # except psycopg2.Error
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -147,7 +148,7 @@ class Premade_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = sqlite3.connect("neurochama.db") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
 			cur.execute(Item.Query)
@@ -170,7 +171,7 @@ class Premade_Outliner_Tool(QT_Tree):
 			self.Output.Spreadsheet.resizeRowsToContents()
 			self.Output.Set = False
 
-		except sqlite3.Error as Error: # except psycopg2.Error
+		except psycopg2.Error as Error: # except psycopg2.Error
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -211,7 +212,7 @@ class Input_Tool(QT_Linear_Contents):
 		try:
 			DB_cursor.execute(f"SELECT * FROM {Table_Name}")
 			DB_connector.commit()
-		except sqlite3.Error as Error: # except psycopg2.Error
+		except psycopg2.Error as Error: # except psycopg2.Error
 			self.Log.append("Error: " + str(Error),"250,50,50")
 		Data = DB_cursor.fetchall()
 		Coulmn_Labels = [str(desc[0]) for desc in DB_cursor.description][1:] # Ignore PK id
@@ -260,7 +261,7 @@ class Input_Tool(QT_Linear_Contents):
 			self.Log.append(f"INSERT INTO {self.Table_Name} ({','.join(self.Columns)}) VALUES ({','.join(Info)})")
 			DB_cursor.execute(f"INSERT INTO {self.Table_Name} ({','.join(self.Columns)}) VALUES ({','.join(Info)})")
 			DB_connector.commit()
-		except sqlite3.Error as Error: # except psycopg2.Error
+		except psycopg2.Error as Error: # except psycopg2.Error
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -310,13 +311,13 @@ class Output_Tool(QT_Linear_Contents):
 				DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = '{self.Spreadsheet.item(row,column).text()}' WHERE id = {self.Spreadsheet.item(row,0).text()}")
 				DB_connector.commit()
 				self.Log.append(f"UPDATE {self.Table_Name} SET {Column_Name} = '{self.Spreadsheet.item(row,column).text()}' WHERE id = {self.Spreadsheet.item(row,0).text()}")
-			except sqlite3.Error as Error: # except psycopg2.Error
+			except psycopg2.Error as Error: # except psycopg2.Error
 				self.Log.append("Error: " + str(Error),"250,50,50")
 
 			DB_connector.close()
 
 	def refresh(self):
-		conn = sqlite3.connect("neurochama.db") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
 			cur.execute(self.Query)
@@ -337,7 +338,7 @@ class Output_Tool(QT_Linear_Contents):
 			self.Spreadsheet.resizeRowsToContents()
 			self.Set = False
 
-		except sqlite3.Error as Error: # except psycopg2.Error
+		except psycopg2.Error as Error: # except psycopg2.Error
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		cur.close()

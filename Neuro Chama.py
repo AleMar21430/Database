@@ -2,7 +2,7 @@
 from Signup import *
 from Admin import Admin_Window
 from User import User_Window
-import sqlite3
+import psycopg2
 import sys
 
 Style = '''*, *::section {
@@ -79,11 +79,11 @@ class Main_Application(QT_Application):
 		sys.exit(self.exec())
 
 	def start(self):
-		conn = sqlite3.connect("neurochama.db") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cursor = conn.cursor()
 		for Queries in open("Db_Create.txt").read().split(";"):
 			try: cursor.execute(Queries)
-			except sqlite3.Error as Error: QT_Toast(Error) # except psycopg2.Error
+			except psycopg2.Error as Error: QT_Toast(Error) # except psycopg2.Error
 		conn.commit()
 		conn.close()
 
