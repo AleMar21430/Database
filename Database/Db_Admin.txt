@@ -42,4 +42,12 @@ ON i.centro_salud_id = cs.id
 WHERE ROUND(i.cantidad_existencias * 0.15, 2) <= 15
 ORDER BY i.cantidad_existencias ASC
 ~
+Top 3 Hospitales más activos|
+SELECT count(historial_medico.centro_salud_id) as conteo, centro_salud.nombre
+FROM public.historial_medico, public.centro_salud
+WHERE historial_medico.centro_salud_id = centro_salud.id
+GROUP BY centro_salud.nombre
+ORDER BY conteo desc
+LIMIT 3; 
+~
 -
