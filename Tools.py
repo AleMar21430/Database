@@ -405,7 +405,6 @@ class Output_Tool(QT_Linear_Contents):
 			DB_cursor = DB_connector.cursor()
 			DB_cursor.execute(f"SELECT * FROM {self.Table_Name}")
 			Column_Name = self.Spreadsheet.horizontalHeaderItem(column).text()
-			print(Column_Name)
 			try:
 				DB_cursor.execute(f"SELECT data_type FROM information_schema.columns WHERE table_name = '{self.Table_Name}' AND column_name = '{Column_Name}'")
 				column_type = DB_cursor.fetchone()[0]
