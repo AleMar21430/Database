@@ -19,10 +19,11 @@ class Query_Tool(QT_Text_Editor):
 		if len(self.textCursor().selectedText()) < 1:
 			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()
-			try: 
+			try:
 				cur.execute(self.toPlainText())
 				conn.commit()
 				self.Data = cur.fetchall()
+				self.Log.append("Query executed succesfully!","150,250,150")
 				try:
 					Coulmn_Labels = [str(desc[0]) for desc in cur.description]
 					self.Output.Set = True
@@ -38,14 +39,12 @@ class Query_Tool(QT_Text_Editor):
 					self.Output.Spreadsheet.resizeColumnsToContents()
 					self.Output.Spreadsheet.resizeRowsToContents()
 					self.Output.Set = False
-					self.Log.append("Query executed succesfully!","150,250,150")
 					self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-				except:
-					self.Output.refresh()
-
-			except psycopg2.Error as Error: 
-				self.Log.append("Error: " + str(Error),"250,50,50")
-
+				except psycopg2.Error as Error:
+					self.Log.append("Nothing to display. " + str(Error),"100,50,50")
+			except:
+				pass
+			self.Output.refresh()
 			cur.close()
 			conn.close()
 		else:
@@ -55,6 +54,7 @@ class Query_Tool(QT_Text_Editor):
 				cur.execute(self.textCursor().block().text())
 				conn.commit()
 				self.Data = cur.fetchall()
+				self.Log.append("Query Fragment executed succesfully!","150,250,150")
 				try:
 					Coulmn_Labels = [str(desc[0]) for desc in cur.description]
 					self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
@@ -68,12 +68,11 @@ class Query_Tool(QT_Text_Editor):
 
 					self.Output.Spreadsheet.resizeColumnsToContents()
 					self.Output.Spreadsheet.resizeRowsToContents()
-					self.Log.append("Query Fragment executed succesfully!","150,250,150")
 					self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-				except:
-					self.Output.refresh()
-			except psycopg2.Error as Error: 
-				self.Log.append("Error: " + str(Error),"250,50,50")
-
+				except psycopg2.Error as Error:
+					self.Log.append("Nothing to display. " + str(Error),"100,50,50")
+			except:
+				pass
+			self.Output.refresh()
 			cur.close()
 			conn.close()

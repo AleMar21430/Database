@@ -38,7 +38,7 @@ class Signup_Window(QT_Window):
 	def signUp(self):
 		if self.Password.text() == self.Password_Confirm.text():
 			if self.Username.text() != "" and self.Password.text() != "":
-				conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+				conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 				cur = conn.cursor()
 				if self.Username.text() == "21430":
 					Tipo = "Admin"
@@ -46,7 +46,7 @@ class Signup_Window(QT_Window):
 					Tipo = "User"
 
 				try: cur.execute(f"INSERT INTO Credenciales (usuario,contrasenia,tipo) VALUES ('{self.Username.text()}','{self.Password.text()}','{Tipo}')")
-				except psycopg2.Error as Error: # except psycopg2.Error
+				except psycopg2.Error as Error:
 					Toast = QT_Toast(str(Error), self.mapToGlobal(self.Signup.pos()))
 					return
 
