@@ -13,6 +13,14 @@ GROUP BY hm.diagnostico, hm.status
 ORDER BY COUNT(hm.diagnostico)
 LIMIT 10;
 ~
+Top 10 Médicos Mmás trabajadores|
+SELECT count(historial_medico.medico_id) as conteo, medico.nombre, medico.apellido
+FROM public.historial_medico, public.medico
+WHERE historial_medico.medico_id = medico.id
+group BY medico.nombre, medico.apellido
+ORDER BY conteo desc
+Limit 10; 
+~
 Pacientes con más asistencia|
 SELECT  p.nombre, p.apellido, p.telefono, p.direccion, p.peso, p.altura, p.imc, cs.nombre AS centro_de_salud, COUNT(hm.paciente_id) AS cantidad_asistencias
 FROM historial_medico hm
