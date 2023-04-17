@@ -366,10 +366,9 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		Delete = QT_Button()
 		self.Text = QT_Text_Editor()
 
-		self.Options.addItem("DB_Creation")
-		self.Options.addItem("DB_Admin_Tree")
-		self.Options.addItem("DB_User_Tree")
-		self.Options.addItem("DB_User_Custom_Ops")
+		self.Options.addItem("DB_Creation_Queries")
+		self.Options.addItem("DB_Tree")
+		self.Options.addItem("DB_Queries")
 		Save.setText("Save")
 		Delete.setText("Wipe Database")
 
