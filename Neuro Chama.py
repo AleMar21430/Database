@@ -83,11 +83,11 @@ class Main_Application(QT_Application):
 		self.USER = "postgres"
 		self.PASSWORD = "123456"
 
-		conn = psycopg2.connect(database=self.DB, user=self.USER, password=self.PASSWORD, host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database=self.DB, user=self.USER, password=self.PASSWORD, host="localhost", port="5432")
 		cursor = conn.cursor()
 		for Queries in open("Db_Create.txt").read().split(";"):
 			try: cursor.execute(Queries)
-			except psycopg2.Error as Error: print(Error) # except psycopg2.Error
+			except psycopg2.Error as Error: print(Error)
 		conn.commit()
 		conn.close()
 		try: self.Window.close()
