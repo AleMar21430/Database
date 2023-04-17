@@ -51,3 +51,6 @@ class Admin_Window(QT_Window):
 
 	def restart(self):
 		self.App.start()
+		self.close()
+		self.deleteLater()
+		self.destroy()

@@ -164,7 +164,7 @@ class QT_Toast(QT_Menu):
 		self.setLayout(Layout)
 		self.setWindowTitle(str(Message))
 		self.setStyleSheet(f"color:rgb({color}); font-size:26px;")
-		self.setWindowFlags(Qt.WindowType.Popup | Qt.WindowType.SplashScreen)
+		self.setWindowFlags(Qt.WindowType.Popup | Qt.WindowType.SplashScreen | Qt.WindowType.WindowStaysOnTopHint)
 		self.setFixedSize(Label.sizeHint())
 
 		timer = QTimer()

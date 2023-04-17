@@ -1,7 +1,7 @@
 ﻿from Qt_Core import *
 from Query_Tool import *
-import os
 import psycopg2
+from psycopg2 import extensions
 
 class Search_Tool(QT_Line_Editor):
 	def __init__(self):
@@ -20,7 +20,6 @@ class Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item):
 		item.setExpanded(False)
-		self.Log.append(f"{item.Display_Name} | {item.Query} | {item.Database_Name} | {item.Table_Name}","250,250,250")
 		self.commit(item)
 
 	def commit(self, Item):
@@ -83,7 +82,6 @@ class Admin_Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item):
 		item.setExpanded(False)
-		self.Log.append(f"{item.Display_Name} | {item.Query} | {item.Database_Name} | {item.Table_Name}","250,250,250")
 		self.commit(item)
 
 	def commit(self, Item):
@@ -154,7 +152,6 @@ class Premade_Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item:QT_Tree_Item):
 		item.setExpanded(False)
-		self.Log.append(f"{item.Display_Name} | {item.Query} | {item.Database_Name} | {item.Table_Name}","250,250,250")
 		self.commit(item)
 
 	def commit(self, Item):
@@ -226,11 +223,11 @@ class Input_Tool(QT_Linear_Contents):
 		except psycopg2.Error as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 		Data = DB_cursor.fetchall()
-		Coulmn_Labels = [str(desc[0]) for desc in DB_cursor.description][1:] # Ignore PK id
+		self.Coulmn_Labels = [str(desc[0]) for desc in DB_cursor.description][1:] # Ignore PK id
 
-		self.Spreadsheet.setColumnCount(len(Coulmn_Labels))
-		self.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
-		self.Columns = Coulmn_Labels
+		self.Spreadsheet.setColumnCount(len(self.Coulmn_Labels))
+		self.Spreadsheet.setHorizontalHeaderLabels(self.Coulmn_Labels)
+		self.Columns = self.Coulmn_Labels
 		self.Spreadsheet.setRowCount(1)
 
 		DB_connector.close()
@@ -238,12 +235,12 @@ class Input_Tool(QT_Linear_Contents):
 		Add_Button = QT_Button()
 		Add_Button.setText("Add Item")
 		Add_Button.clicked.connect(self.commit)
-		Cancel_Button = QT_Button()
-		Cancel_Button.setText("Cancel")
-		Cancel_Button.clicked.connect(self.quit)
+		self.Cancel_Button = QT_Button()
+		self.Cancel_Button.setText("Cancel")
+		self.Cancel_Button.clicked.connect(self.quit)
 
 		self.Layout.addWidget(Add_Button)
-		self.Layout.addWidget(Cancel_Button)
+		self.Layout.addWidget(self.Cancel_Button)
 		self.Layout.addWidget(self.Spreadsheet)
 		self.Layout.setStretch(0,0)
 		self.Layout.setStretch(1,0)
@@ -265,26 +262,36 @@ class Input_Tool(QT_Linear_Contents):
 		Data = []
 		for i in range(len(self.Columns)):
 			try:
-				Data.append(self.Spreadsheet.item(0,i).text())
+				if self.Spreadsheet.item(0,i).text() == "''":
+					Data.append("null")
+				else:
+					Data.append(self.Spreadsheet.item(0,i).text())
+				
 			except:
-				Data.append("Null")
+				Data.append("None")
 
 		try:
-			Info = [f"'{item}'" for item in Data]
-			self.Log.append(f"INSERT INTO {self.Table_Name} ({','.join(self.Columns)}) VALUES ({','.join(Info)})")
+			column_type = []
+			Info = [f"{item}" for item in Data]
+			for i in range(len(self.Coulmn_Labels)):
+				DB_cursor.execute(f"SELECT data_type FROM information_schema.columns WHERE table_name = '{self.Table_Name}' AND column_name = '{self.Coulmn_Labels[i]}'")
+				column_type.append(DB_cursor.fetchone()[0])
+			for i in range(len(column_type)):
+				if column_type[i] == "text" or column_type[i] == "varchar":
+					Info[i] = f"'{Info[i]}'"
+
 			DB_cursor.execute(f"INSERT INTO {self.Table_Name} ({','.join(self.Columns)}) VALUES ({','.join(Info)})")
 			DB_connector.commit()
+			
+			self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
+
+			DB_connector.close()
+			self.Output.refresh()
+			self.quit()
+
 		except psycopg2.Error as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
-		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
-
-		DB_connector.close()
-		self.Output.refresh()
-		self.close()
-		self.deleteLater()
-		self.destroy()
-	
 	def quit(self):
 		self.close()
 		self.deleteLater()
@@ -324,7 +331,6 @@ class Output_Tool(QT_Linear_Contents):
 			try:
 				DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = '{self.Spreadsheet.item(row,column).text()}' WHERE id = {self.Spreadsheet.item(row,0).text()}")
 				DB_connector.commit()
-				self.Log.append(f"UPDATE {self.Table_Name} SET {Column_Name} = '{self.Spreadsheet.item(row,column).text()}' WHERE id = {self.Spreadsheet.item(row,0).text()}")
 			except psycopg2.Error as Error:
 				self.Log.append("Error: " + str(Error),"250,50,50")
 
@@ -418,8 +424,12 @@ class Source_Editor_Tool(QT_Linear_Contents):
 	def wipe(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")
 		if Confirmation.exec() == QMessageBox.StandardButton.Yes:
-			conn = psycopg2.connect(database=self.Parent.App.DB, user=self.Parent.App.USER, password=self.Parent.App.PASSWORD, host="localhost", port="5432")
+			conn = psycopg2.connect(user=self.Parent.App.USER, password=self.Parent.App.PASSWORD)
 			cursor = conn.cursor()
+
+			autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
+			conn.set_isolation_level( autocommit )
+
 			try: cursor.execute(f"DROP DATABASE {self.Parent.App.DB}")
 			except psycopg2.Error as Error: print(Error)
 			conn.commit()
