@@ -38,7 +38,7 @@ class Outliner_Tool(QT_Tree):
 
 			for row in range(len(self.Data)):
 				for column in range(len(self.Data[0])):
-					item = QTableWidgetItem(self.Data[row][column])
+					item = QTableWidgetItem(str(self.Data[row][column]))
 					self.Output.Spreadsheet.setItem(row, column, item)
 
 			self.Output.Spreadsheet.resizeColumnsToContents()
@@ -100,7 +100,7 @@ class Admin_Outliner_Tool(QT_Tree):
 
 			for row in range(len(self.Data)):
 				for column in range(len(self.Data[0])):
-					item = QTableWidgetItem(self.Data[row][column])
+					item = QTableWidgetItem(str(self.Data[row][column]))
 					self.Output.Spreadsheet.setItem(row, column, item)
 
 			self.Output.Spreadsheet.resizeColumnsToContents()
@@ -162,14 +162,14 @@ class Premade_Outliner_Tool(QT_Tree):
 
 			for row in range(len(self.Data)):
 				for column in range(len(self.Data[0])):
-					item = QTableWidgetItem(self.Data[row][column])
+					item = QTableWidgetItem(str(self.Data[row][column]))
 					self.Output.Spreadsheet.setItem(row, column, item)
 
 			self.Output.Spreadsheet.resizeColumnsToContents()
 			self.Output.Spreadsheet.resizeRowsToContents()
 			self.Output.Set = False
 
-		except sqlite3.Error as Error: 
+		except sqlite3.Error as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -329,7 +329,7 @@ class Output_Tool(QT_Linear_Contents):
 
 			for row in range(len(self.Data)):
 				for column in range(len(self.Data[0])):
-					item = QTableWidgetItem(self.Data[row][column])
+					item = QTableWidgetItem(str(self.Data[row][column]))
 					self.Spreadsheet.setItem(row, column, item)
 
 			self.Spreadsheet.resizeColumnsToContents()

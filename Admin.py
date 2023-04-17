@@ -9,6 +9,7 @@ class Admin_Window(QT_Window):
 		self.Log = Log_Tool()
 		Output = Output_Tool(self.Log)
 		Outliner = Admin_Outliner_Tool(self.Log, Output)
+		Premade_Outliner = Premade_Outliner_Tool(self.Log,Output)
 		Query = Query_Tool(self.Log, Output)
 
 		Restart = QT_Button()
@@ -17,6 +18,7 @@ class Admin_Window(QT_Window):
 		Splitter = QT_Splitter(False)
 		Outline_Layout = QT_Linear_Contents()
 		Outline_Layout.Layout.addWidget(Outliner)
+		Outline_Layout.Layout.addWidget(Premade_Outliner)
 		Outline_Layout.Layout.addWidget(Restart)
 		Splitter.addWidget(Outline_Layout)
 		VSplitter = QT_Splitter(True)
@@ -36,7 +38,8 @@ class Admin_Window(QT_Window):
 		VSplitter.setStretchFactor(1,35)
 		VOutputSplitter.setSizes([50,50])
 		Outline_Layout.Layout.setStretch(0,1)
-		Outline_Layout.Layout.setStretch(1,0)
+		Outline_Layout.Layout.setStretch(1,1)
+		Outline_Layout.Layout.setStretch(2,0)
 
 		self.setCentralWidget(Splitter)
 		self.setWindowIcon(QIcon("Icon.jpg"))
