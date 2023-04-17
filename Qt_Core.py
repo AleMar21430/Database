@@ -158,10 +158,10 @@ class QT_Toast(QT_Menu):
 	def __init__(self, Message = "Message", Position = QPoint(0,0), color = "250,50,50"):
 		super().__init__()
 		Layout = QT_Linear_Layout()
-		Label = QT_Label(Message)
+		Label = QT_Label(str(Message))
 		Layout.addWidget(Label)
 		self.setLayout(Layout)
-		self.setWindowTitle(Message)
+		self.setWindowTitle(str(Message))
 		self.setStyleSheet(f"color:rgb({color}); font-size:26px;")
 		self.setWindowFlags(Qt.WindowType.Popup | Qt.WindowType.SplashScreen)
 		self.setFixedSize(Label.sizeHint())

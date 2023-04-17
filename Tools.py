@@ -210,7 +210,7 @@ class Input_Tool(QT_Linear_Contents):
 		self.Log = Log
 		self.Table_Name = Table_Name
 		self.Spreadsheet = QT_Spreadsheet()
-		DB_connector = sqlite3.connect('neurochama.db')
+		DB_connector = psycopg2.connect('neurochama.db')
 		DB_cursor = DB_connector.cursor()
 
 		try:
@@ -250,7 +250,7 @@ class Input_Tool(QT_Linear_Contents):
 		self.showMaximized()
 
 	def commit(self):
-		DB_connector = sqlite3.connect('neurochama.db')
+		DB_connector = psycopg2.connect('neurochama.db')
 		DB_cursor = DB_connector.cursor()
 
 		Data = []
@@ -306,7 +306,7 @@ class Output_Tool(QT_Linear_Contents):
 
 	def updateDatabase(self, row, column):
 		if not self.Set:
-			DB_connector = sqlite3.connect('neurochama.db')
+			DB_connector = psycopg2.connect('neurochama.db')
 			DB_cursor = DB_connector.cursor()
 
 			DB_cursor.execute(f'PRAGMA table_info({self.Table_Name})')
@@ -350,8 +350,9 @@ class Output_Tool(QT_Linear_Contents):
 		conn.close()
 
 class Source_Editor_Tool(QT_Linear_Contents):
-	def __init__(self, Log):
+	def __init__(self,Parent, Log):
 		super().__init__()
+		self.Parent = Parent
 		self.Log = Log
 		self.Options = QComboBox()
 		Save = QT_Button()
@@ -369,7 +370,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 
 		Header.Layout.addWidget(self.Options)
 		Header.Layout.addWidget(Save)
-		Header.Layout.addWidget(Delete)
+		#Header.Layout.addWidget(Delete)
 
 		self.Layout.addWidget(Header)
 		self.Layout.addWidget(self.Text)
@@ -401,6 +402,10 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		if Confirmation.exec() == QMessageBox.StandardButton.Yes:
 			open(self.Path,"w",encoding="utf-8").write(self.Text.toPlainText())
 			self.Log.append("File Saved","50,250,50")
+			self.Parent.Outliner.clear()
+			self.Parent.Outliner.setTree()
+			self.Parent.Premade_Outliner.clear()
+			self.Parent.Premade_Outliner.setTree()
 
 	def wipe(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")

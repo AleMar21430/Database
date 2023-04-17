@@ -8,8 +8,8 @@ class Admin_Window(QT_Window):
 		self.App  = App
 		self.Log = Log_Tool()
 		Output = Output_Tool(self.App, self.Log)
-		Outliner = Admin_Outliner_Tool(self.App, self.Log, Output)
-		Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log,Output)
+		self.Outliner = Admin_Outliner_Tool(self.App, self.Log, Output)
+		self.Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log,Output)
 		Query = Query_Tool(self.App, self.Log, Output)
 
 		Restart = QT_Button()
@@ -17,8 +17,8 @@ class Admin_Window(QT_Window):
 
 		Splitter = QT_Splitter(False)
 		Outline_Layout = QT_Linear_Contents()
-		Outline_Layout.Layout.addWidget(Outliner)
-		Outline_Layout.Layout.addWidget(Premade_Outliner)
+		Outline_Layout.Layout.addWidget(self.Outliner)
+		Outline_Layout.Layout.addWidget(self.Premade_Outliner)
 		Outline_Layout.Layout.addWidget(Restart)
 		Splitter.addWidget(Outline_Layout)
 		VSplitter = QT_Splitter(True)
@@ -27,7 +27,7 @@ class Admin_Window(QT_Window):
 		Splitter.addWidget(VSplitter)
 		VOutputSplitter = QT_Splitter(True)
 		VOutputSplitter.addWidget(Output)
-		Source_Editor = Source_Editor_Tool(self.Log)
+		Source_Editor = Source_Editor_Tool(self, self.Log)
 		VOutputSplitter.addWidget(Source_Editor)
 		Splitter.addWidget(VOutputSplitter)
 

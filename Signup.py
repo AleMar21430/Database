@@ -45,10 +45,9 @@ class Signup_Window(QT_Window):
 				else:
 					Tipo = "User"
 
-				try: cur.execute(f"INSERT INTO Credenciales (usuario,contrasenia,tipo) VALUES (?,?,?)", (self.Username.text(),self.Password.text(),Tipo))
+				try: cur.execute(f"INSERT INTO Credenciales (usuario,contrasenia,tipo) VALUES ('{self.Username.text()}','{self.Password.text()}','{Tipo}')")
 				except psycopg2.Error as Error: # except psycopg2.Error
 					Toast = QT_Toast(str(Error), self.mapToGlobal(self.Signup.pos()))
-					
 					return
 
 				conn.commit()
