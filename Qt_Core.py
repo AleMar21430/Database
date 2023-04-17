@@ -81,13 +81,26 @@ class QT_File_Explorer(QFileDialog):
 	def __init__(self):
 		super().__init__()
 
-class QT_Text_Stream(QTextBrowser):
+class QT_Text_Stream(QT_Linear_Contents):
 	def __init__(self):
 		super().__init__()
 		super().setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Expanding)
+		Clear = QT_Button()
+		Clear.setText("Clear")
+		self.Log = QTextBrowser()
+		self.Log.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Expanding)
+		self.Layout.addWidget(Clear)
+		self.Layout.addWidget(self.Log)
+		self.Layout.setStretch(0,0)
+		self.Layout.setStretch(1,1)
+
+		Clear.clicked.connect(self.clear)
 
 	def append(self, Text = "Hello", RGB = "250,250,250"):
-		super().append(f'<p style="color:rgb({RGB})">{Text}</p>')
+		self.Log.append(f'<p style="color:rgb({RGB})">{Text}</p>')
+
+	def clear(self):
+		self.Log.clear()
 
 class QT_Splitter(QSplitter):
 	def __init__(self, Vertical: bool = True):

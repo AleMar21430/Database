@@ -70,17 +70,25 @@ class Outliner_Tool(QT_Tree):
 						Table_Info.append(Line)
 				for i in range(len(Table_Info)):
 					if i == 0:
-						Parent = Table_Info[i].split('|')
-						Parent0 = Parent[0].replace("\n", " ")
-						Parent1 = Parent[1].replace("\n", " ")
-						exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
+						try:
+							Parent = Table_Info[i].split('|')
+							Parent0 = Parent[0].replace("\n", " ")
+							Parent1 = Parent[1].replace("\n", " ")
+							exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
+						except Exception as Error:
+							print(Error)
+							self.Log.append("Error: " + str(Error),"250,50,50")
 					else:
-						Child = Table_Info[i].split('|')
-						Parent0 = Parent[0].replace("\n", " ")
-						Parent1 = Parent[1].replace("\n", " ")
-						Child0 = Child[0].replace("\n", " ")
-						Child1 = Child[1].replace("\n", " ")
-						exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
+						try:
+							Child = Table_Info[i].split('|')
+							Parent0 = Parent[0].replace("\n", " ")
+							Parent1 = Parent[1].replace("\n", " ")
+							Child0 = Child[0].replace("\n", " ")
+							Child1 = Child[1].replace("\n", " ")
+							exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
+						except Exception as Error:
+							print(Error)
+							self.Log.append("Error: " + str(Error),"250,50,50")
 
 class Admin_Outliner_Tool(QT_Tree):
 	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
@@ -145,17 +153,25 @@ class Admin_Outliner_Tool(QT_Tree):
 						Table_Info.append(Line)
 				for i in range(len(Table_Info)):
 					if i == 0:
-						Parent = Table_Info[i].split('|')
-						Parent0 = Parent[0].replace("\n", " ")
-						Parent1 = Parent[1].replace("\n", " ")
-						exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
+						try:
+							Parent = Table_Info[i].split('|')
+							Parent0 = Parent[0].replace("\n", " ")
+							Parent1 = Parent[1].replace("\n", " ")
+							exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
+						except Exception as Error:
+							print(Error)
+							self.Log.append("Error: " + str(Error),"250,50,50")
 					else:
-						Child = Table_Info[i].split('|')
-						Parent0 = Parent[0].replace("\n", " ")
-						Parent1 = Parent[1].replace("\n", " ")
-						Child0 = Child[0].replace("\n", " ")
-						Child1 = Child[1].replace("\n", " ")
-						exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
+						try:
+							Child = Table_Info[i].split('|')
+							Parent0 = Parent[0].replace("\n", " ")
+							Parent1 = Parent[1].replace("\n", " ")
+							Child0 = Child[0].replace("\n", " ")
+							Child1 = Child[1].replace("\n", " ")
+							exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
+						except Exception as Error:
+							print(Error)
+							self.Log.append("Error: " + str(Error),"250,50,50")
 
 class Premade_Outliner_Tool(QT_Tree):
 	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool", Admin = False):
@@ -217,13 +233,21 @@ class Premade_Outliner_Tool(QT_Tree):
 					Table_Info.append(Line.strip())
 			for i in range(len(Table_Info)):
 				if i == 0:
-					Parent = Table_Info[i].split('|')
-					Query = Parent[2].replace("\n", " ")
-					exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','''{Query}''')")
+					try:
+						Parent = Table_Info[i].split('|')
+						Query = Parent[2].replace("\n", " ")
+						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','''{Query}''')")
+					except Exception as Error:
+						print(Error)
+						self.Log.append("Error: " + str(Error),"250,50,50")
 				else:
-					Child = Table_Info[i].split('|')
-					Query = Child[1].replace("\n", " ")
-					exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','''{Query}''')")
+					try:
+						Child = Table_Info[i].split('|')
+						Query = Child[1].replace("\n", " ")
+						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','''{Query}''')")
+					except Exception as Error:
+						print(Error)
+						self.Log.append("Error: " + str(Error),"250,50,50")
 
 class Log_Tool(QT_Text_Stream):
 	def __init__(self):
