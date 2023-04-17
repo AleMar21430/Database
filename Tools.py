@@ -456,9 +456,11 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		self.Log = Log
 		self.Options = QComboBox()
 		Save = QT_Button()
-		Save.setText("Save")
+		Save.setText("Save current File")
+		Restore = QT_Button()
+		Restore.setText("Restore from File")
 		Wipe = QT_Button()
-		Wipe.setText("Wipe")
+		Wipe.setText("Wipe database")
 		self.Text = QT_Text_Editor()
 
 		self.Options.addItem("DB_Creation_Queries")
@@ -470,10 +472,12 @@ class Source_Editor_Tool(QT_Linear_Contents):
 
 		Header.Layout.addWidget(self.Options)
 		Header.Layout.addWidget(Save)
+		Header.Layout.addWidget(Restore)
 		Header.Layout.addWidget(Wipe)
 		Header.Layout.setStretch(0,1)
 		Header.Layout.setStretch(1,1)
 		Header.Layout.setStretch(2,1)
+		Header.Layout.setStretch(3,1)
 
 		self.Layout.addWidget(Header)
 		self.Layout.addWidget(self.Text)
@@ -482,6 +486,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 
 		self.Options.currentTextChanged.connect(self.changeSource)
 		Save.clicked.connect(self.save)
+		Restore.clicked.connect(self.restore)
 		Wipe.clicked.connect(self.wipe)
 
 		self.Path = "./Database/Db_Create.txt"
@@ -508,6 +513,17 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Parent.Outliner.setTree()
 			self.Parent.Premade_Outliner.clear()
 			self.Parent.Premade_Outliner.setTree()
+
+	def restore(self):
+		Path = QFileDialog.getOpenFileName(self, "Restore from file","./")
+		if Path != "":
+			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
+			cur = conn.cursor()
+			try: cur.execute(open(Path, 'r').read())
+			except psycopg2.Error as Error: self.Log.append("Error: " + str(Error),"250,50,50")
+			conn.commit()
+			cur.close()
+			conn.close()
 	
 	def wipe(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")
