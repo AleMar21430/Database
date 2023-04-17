@@ -1,4 +1,5 @@
-Expedientes de los Pacientes|pacientes|
+Reportes|reporte|Pass~
+Expedientes de los Pacientes|
 SELECT *
 FROM paciente pac
 INNER JOIN precedentes_paciente pre_pac
@@ -6,8 +7,7 @@ ON pac.id = pre_pac.paciente_id
 INNER JOIN adiccion ad
 ON pac.id = ad.paciente_id
 ~
--
-+Medicamentos por vencer|medicamentos|
+Medicamentos por vencer|medicamentos|
 SELECT cs.nombre, cs.localizacion, m.nombre, i.cantidad_existencias, ROUND(i.cantidad_existencias * 0.15, 2) AS porcentaje, i.porcentaje_por_vencer AS cantidad_a_vencer
 FROM inventario i
 INNER JOIN medicamento m

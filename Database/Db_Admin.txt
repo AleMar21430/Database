@@ -13,6 +13,17 @@ GROUP BY hm.diagnostico, hm.status
 ORDER BY COUNT(hm.diagnostico)
 LIMIT 10;
 ~
+Pacientes con más asistencia|
+SELECT  p.nombre, p.apellido, p.telefono, p.direccion, p.peso, p.altura, p.imc, cs.nombre AS centro_de_salud, COUNT(hm.paciente_id) AS cantidad_asistencias
+FROM historial_medico hm
+INNER JOIN paciente p
+ON hm.paciente_id = p.id
+INNER JOIN centro_salud cs
+ON hm.centro_salud_id = cs.id
+GROUP BY p.nombre, p.apellido, p.telefono, p.direccion, p.peso, p.altura, p.imc, cs.nombre
+ORDER BY COUNT(hm.paciente_id) DESC
+LIMIT 5;
+~
 Medicinas por vencer|
 SELECT cs.nombre, cs.localizacion, m.nombre, i.cantidad_existencias, ROUND(i.cantidad_existencias * 0.15, 2) AS porcentaje, i.porcentaje_por_vencer AS cantidad_a_vencer
 FROM inventario i
