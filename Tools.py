@@ -55,7 +55,7 @@ class Outliner_Tool(QT_Tree):
 		conn.close()
 
 	def setTree(self):
-		with open("Db_GUI_Create.txt", "r", encoding = "utf-8") as File:
+		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
 			for Tables in File.read().split("+"):
 				Table_Info = []
 				for Line in Tables.split("\n"):
@@ -119,7 +119,7 @@ class Admin_Outliner_Tool(QT_Tree):
 		conn.close()
 
 	def setTree(self):
-		with open("Db_GUI_Create.txt", "r", encoding = "utf-8") as File:
+		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
 			Pre = File.read()
 			Pre += '''+Credenciales|credenciales
 ID|id
@@ -189,7 +189,7 @@ class Premade_Outliner_Tool(QT_Tree):
 		conn.close()
 
 	def setTree(self):
-		with open("Db_GUI_Custom.txt", "r", encoding = "utf-8") as File:
+		with open("./Database/Db_Queries.txt", "r", encoding = "utf-8") as File:
 			for Tables in File.read().split("+"):
 				Table_Info = []
 				for Line in Tables.split("~"):
@@ -253,7 +253,7 @@ class Input_Tool(QT_Linear_Contents):
 		self.Spreadsheet.resizeRowsToContents()
 
 		self.setWindowTitle("Input")
-		self.setWindowIcon(QIcon("Icon.jpg"))
+		self.setWindowIcon(QIcon("./Resources/Icon.jpg"))
 		self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.CustomizeWindowHint)
 		self.show()
 		self.setGeometry(QRect(self.Output.mapToGlobal(self.Output.geometry().topLeft()),QSize(self.Output.size().width(), 150)))
@@ -392,16 +392,16 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		Save.clicked.connect(self.save)
 		Wipe.clicked.connect(self.wipe)
 
-		self.Path = "./Db_Create.txt"
+		self.Path = "./Database/Db_Create.txt"
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 
 	def changeSource(self):
 		if self.Options.currentText() == "DB_Creation_Queries":
-			self.Path = "./Db_Create.txt"
+			self.Path = "./Database/Db_Create.txt"
 		elif self.Options.currentText() == "DB_Tree":
-			self.Path = "./Db_GUI_Create.txt"
+			self.Path = "./Database/Db_Tables.txt"
 		elif self.Options.currentText() == "DB_Queries":
-			self.Path = "./Db_GUI_Custom.txt"
+			self.Path = "./Database/Db_Queries.txt"
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 

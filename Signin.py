@@ -27,7 +27,7 @@ class Signin_Window(QT_Window):
 
 		self.setCentralWidget(Layout)
 		self.setWindowTitle("Neuro Chama Signin")
-		self.setWindowIcon(QIcon("Icon.jpg"))
+		self.setWindowIcon(QIcon("./Resources/Icon.jpg"))
 		self.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint)
 		self.show()
 

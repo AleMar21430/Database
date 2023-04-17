@@ -44,27 +44,27 @@ QScrollBar::add-line, QScrollBar::sub-line {
 	background:transparent
 }
 QTreeWidget::branch:has-siblings:!adjoins-item {
-	border-image: url(vline.png) 0;
+	border-image: url(./Resources/vline.png) 0;
 }
 
 QTreeWidget::branch:has-siblings:adjoins-item {
-	border-image: url(branch-more.png) 0;
+	border-image: url(./Resources/branch-more.png) 0;
 }
 
 QTreeWidget::branch:!has-children:!has-siblings:adjoins-item {
-	border-image: url(branch-end.png) 0;
+	border-image: url(./Resources/branch-end.png) 0;
 }
 
 QTreeWidget::branch:has-children:!has-siblings:closed,
 QTreeWidget::branch:closed:has-children:has-siblings {
 	border-image: none;
-	image: url(branch-closed.png);
+	image: url(./Resources/branch-closed.png);
 }
 
 QTreeWidget::branch:open:has-children:!has-siblings,
 QTreeWidget::branch:open:has-children:has-siblings  {
 	border-image: none;
-	image: url(branch-open.png);
+	image: url(./Resources/branch-open.png);
 }
 QPlainTextEdit {
 	background:rgb(25,25,25);
@@ -86,7 +86,7 @@ class Main_Application(QT_Application):
 			self.PASSWORD = "123"
 			conn = psycopg2.connect(database=self.DB, user=self.USER, password=self.PASSWORD, host="localhost", port="5432")
 			cursor = conn.cursor()
-			for Queries in open("Db_Create.txt").read().split(";"):
+			for Queries in open("./Database/Db_Create.txt").read().split(";"):
 				try: cursor.execute(Queries)
 				except psycopg2.Error as Error: print(Error)
 			conn.commit()

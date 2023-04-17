@@ -35,7 +35,7 @@ class User_Window(QT_Window):
 
 		self.setCentralWidget(Splitter)
 		self.setWindowTitle("Neuro Chama")
-		self.setWindowIcon(QIcon("Icon.jpg"))
+		self.setWindowIcon(QIcon("./Resources/Icon.jpg"))
 		self.showMaximized()
 		self.Log.append("Initialized","50,250,250")
 

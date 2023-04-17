@@ -42,7 +42,7 @@ class Admin_Window(QT_Window):
 		Outline_Layout.Layout.setStretch(2,0)
 
 		self.setCentralWidget(Splitter)
-		self.setWindowIcon(QIcon("Icon.jpg"))
+		self.setWindowIcon(QIcon("./Resources/Icon.jpg"))
 		self.setWindowTitle("Neuro Chama Admin")
 		self.showMaximized()
 		self.Log.append("Initialized","50,250,250")
