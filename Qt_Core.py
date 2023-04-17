@@ -86,7 +86,7 @@ class QT_Text_Stream(QT_Linear_Contents):
 		super().__init__()
 		super().setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Expanding)
 		Clear = QT_Button()
-		Clear.setText("Clear")
+		Clear.setText("Clear Log")
 		self.Log = QTextBrowser()
 		self.Log.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Expanding)
 		self.Layout.addWidget(Clear)
