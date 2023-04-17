@@ -90,7 +90,8 @@ class Main_Application(QT_Application):
 			except psycopg2.Error as Error: print(Error) # except psycopg2.Error
 		conn.commit()
 		conn.close()
-		self.Window.close()
+		try: self.Window.close()
+		except: pass
 		self.Window = Signin_Window(self)
 		self.setStyleSheet(Style)
 
