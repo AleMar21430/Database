@@ -69,6 +69,7 @@ class Query_Tool(QT_Text_Editor):
 					self.Output.Spreadsheet.resizeColumnsToContents()
 					self.Output.Spreadsheet.resizeRowsToContents()
 					self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+
 				except psycopg2.Error as Error:
 					self.Log.append("Nothing to display. " + str(Error),"100,50,50")
 			except:

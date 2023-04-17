@@ -53,8 +53,10 @@ class Outliner_Tool(QT_Tree):
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
 		for row in range(self.Output.Spreadsheet.rowCount()):
-				item = self.Output.Spreadsheet.item(row, 0)
-				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+			item = self.Output.Spreadsheet.item(row, 0)
+			flags = item.flags()
+			flags &= Qt.ItemFlag.ItemIsEditable
+			item.setFlags(flags)
 		cur.close()
 		conn.close()
 
@@ -121,8 +123,10 @@ class Admin_Outliner_Tool(QT_Tree):
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
 		for row in range(self.Output.Spreadsheet.rowCount()):
-				item = self.Output.Spreadsheet.item(row, 0)
-				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+			item = self.Output.Spreadsheet.item(row, 0)
+			flags = item.flags()
+			flags &= Qt.ItemFlag.ItemIsEditable
+			item.setFlags(flags)
 		cur.close()
 		conn.close()
 
@@ -193,10 +197,7 @@ class Premade_Outliner_Tool(QT_Tree):
 		except psycopg2.Error as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
-		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
-		for row in range(self.Output.Spreadsheet.rowCount()):
-				item = self.Output.Spreadsheet.item(row, 0)
-				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 		cur.close()
 		conn.close()
 
@@ -301,7 +302,9 @@ class Input_Tool(QT_Linear_Contents):
 			self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
 			for row in range(self.Output.Spreadsheet.rowCount()):
 				item = self.Output.Spreadsheet.item(row, 0)
-				item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+				flags = item.flags()
+				flags &= Qt.ItemFlag.ItemIsEditable
+				item.setFlags(flags)
 
 			DB_connector.close()
 			self.Output.refresh()
