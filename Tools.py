@@ -357,23 +357,26 @@ class Output_Tool(QT_Linear_Contents):
 		conn.close()
 
 class Source_Editor_Tool(QT_Linear_Contents):
-	def __init__(self,Parent, Log):
+	def __init__(self, Parent, Log):
 		super().__init__()
 		self.Parent = Parent
 		self.Log = Log
 		self.Options = QComboBox()
 		Save = QT_Button()
+		Save.setText("Save")
+		Wipe = QT_Button()
+		Wipe.setText("Wipe")
 		self.Text = QT_Text_Editor()
 
 		self.Options.addItem("DB_Creation_Queries")
 		self.Options.addItem("DB_Tree")
 		self.Options.addItem("DB_Queries")
-		Save.setText("Save")
 
 		Header = QT_Linear_Contents(False)
 
 		Header.Layout.addWidget(self.Options)
 		Header.Layout.addWidget(Save)
+		Header.Layout.addWidget(Wipe)
 
 		self.Layout.addWidget(Header)
 		self.Layout.addWidget(self.Text)
@@ -382,6 +385,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 
 		self.Options.currentTextChanged.connect(self.changeSource)
 		Save.clicked.connect(self.save)
+		Wipe.clicked.connect(self.wipe)
 
 		self.Path = "./Db_Create.txt"
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
@@ -405,3 +409,15 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Parent.Outliner.setTree()
 			self.Parent.Premade_Outliner.clear()
 			self.Parent.Premade_Outliner.setTree()
+	
+	def wipe(self):
+		Confirmation = QT_Confirmation(self,"Are you sure you want to WIPE THE DATABASE")
+		if Confirmation.exec() == QMessageBox.StandardButton.Yes:
+			conn = psycopg2.connect(database=self.Parent.App.DB, user=self.Parent.App.USER, password=self.Parent.App.PASSWORD, host="localhost", port="5432")
+			cursor = conn.cursor()
+			try: cursor.execute(f"DROP DATABASE {self.Parent.App.DB}")
+			except psycopg2.Error as Error: print(Error)
+			conn.commit()
+			cursor.close()
+			conn.close()
+			self.Parent.restart()

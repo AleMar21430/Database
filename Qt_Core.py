@@ -58,6 +58,7 @@ class QT_Text_Editor(QPlainTextEdit):
 		super().__init__()
 		super().setContentsMargins(0,0,0,0)
 		super().setTabStopDistance(40)
+		super().setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
 
 class QT_Linear_Layout(QBoxLayout):
 	def __init__(self, Vertical: bool = True):
