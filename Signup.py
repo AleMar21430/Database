@@ -30,7 +30,7 @@ class Signup_Window(QT_Window):
 		Layout.Layout.addWidget(self.Signup)
 
 		self.setCentralWidget(Layout)
-		self.setWindowTitle("Neuro Chama Signin")
+		self.setWindowTitle("Neuro Chama Signup")
 		self.setWindowIcon(QIcon("Icon.jpg"))
 		self.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint)
 		self.show()
