@@ -391,11 +391,11 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 
 	def changeSource(self):
-		if self.Options.currentText() == "DB Creation Queries":
+		if self.Options.currentText() == "DB_Creation_Queries":
 			self.Path = "./Db_Create.txt"
-		elif self.Options.currentText() == "DB Tree":
+		elif self.Options.currentText() == "DB_Tree":
 			self.Path = "./Db_GUI_Create.txt"
-		elif self.Options.currentText() == "DB User Custom Ops":
+		elif self.Options.currentText() == "DB_Queries":
 			self.Path = "./Db_GUI_Custom.txt"
 		self.save()
 		self.Text.clear()

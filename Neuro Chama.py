@@ -87,7 +87,7 @@ class Main_Application(QT_Application):
 		cursor = conn.cursor()
 		for Queries in open("Db_Create.txt").read().split(";"):
 			try: cursor.execute(Queries)
-			except psycopg2.Error as Error: QT_Toast(Error) # except psycopg2.Error
+			except psycopg2.Error as Error: print(Error) # except psycopg2.Error
 		conn.commit()
 		conn.close()
 		self.Window.close()
