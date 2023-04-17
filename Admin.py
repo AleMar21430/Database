@@ -5,12 +5,12 @@ from Tools import *
 class Admin_Window(QT_Window):
 	def __init__(self, App):
 		super().__init__()
-		self.App = App
+		self.App  = App
 		self.Log = Log_Tool()
-		Output = Output_Tool(self.Log)
-		Outliner = Admin_Outliner_Tool(self.Log, Output)
-		Premade_Outliner = Premade_Outliner_Tool(self.Log,Output)
-		Query = Query_Tool(self.Log, Output)
+		Output = Output_Tool(self.App, self.Log)
+		Outliner = Admin_Outliner_Tool(self.App, self.Log, Output)
+		Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log,Output)
+		Query = Query_Tool(self.App, self.Log, Output)
 
 		Restart = QT_Button()
 		Restart.setText("Restart")

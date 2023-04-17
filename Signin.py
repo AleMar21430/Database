@@ -33,7 +33,7 @@ class Signin_Window(QT_Window):
 
 	def signIn(self):
 		if self.Username.text() != "" and self.Password.text() != "":
-			conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 			cur = conn.cursor()
 
 			try:

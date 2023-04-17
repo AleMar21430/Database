@@ -1,9 +1,10 @@
 ﻿from Qt_Core import *
-import sqlite3
+import psycopg2
 
 class Query_Tool(QT_Text_Editor):
-	def __init__(self, Log: QT_Text_Stream, Output):
+	def __init__(self, App, Log: QT_Text_Stream, Output):
 		super().__init__()
+		self.App = App
 		self.Log = Log
 		self.Output = Output
 		self.setPlaceholderText("Press F5 to run Query")
@@ -16,7 +17,7 @@ class Query_Tool(QT_Text_Editor):
 
 	def commit(self):
 		if len(self.textCursor().selectedText()) < 1:
-			conn = sqlite3.connect("neurochama.db")
+			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()
 			try: 
 				cur.execute(self.toPlainText())
@@ -42,13 +43,13 @@ class Query_Tool(QT_Text_Editor):
 				except:
 					self.Output.refresh()
 
-			except sqlite3.Error as Error: 
+			except psycopg2.Error as Error: 
 				self.Log.append("Error: " + str(Error),"250,50,50")
 
 			cur.close()
 			conn.close()
 		else:
-			conn = sqlite3.connect("neurochama.db")
+			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()
 			try: 
 				cur.execute(self.textCursor().block().text())
@@ -71,7 +72,7 @@ class Query_Tool(QT_Text_Editor):
 					self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 				except:
 					self.Output.refresh()
-			except sqlite3.Error as Error: 
+			except psycopg2.Error as Error: 
 				self.Log.append("Error: " + str(Error),"250,50,50")
 
 			cur.close()

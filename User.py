@@ -7,17 +7,17 @@ class User_Window(QT_Window):
 		super().__init__()
 		self.App = App
 		self.Log = Log_Tool()
-		Output = Output_Tool(self.Log)
+		Output = Output_Tool(self.App, self.Log)
 		Search = Search_Tool()
-		Premade_Outliner = Premade_Outliner_Tool(self.Log, Output)
-		Outliner = Outliner_Tool(self.Log, Output)
+		Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log, Output)
+		Outliner = Outliner_Tool(self.App, self.Log, Output)
 		Restart = QT_Button()
 		Restart.setText("Restart")
 
 		Splitter = QT_Splitter(False)
 
 		InputSplitter = QT_Splitter(True)
-		InputSplitter.addWidget(Search)
+		#InputSplitter.addWidget(Search)
 		InputSplitter.addWidget(Premade_Outliner)
 		InputSplitter.addWidget(Outliner)
 		InputSplitter.addWidget(Restart)
@@ -30,7 +30,7 @@ class User_Window(QT_Window):
 		Splitter.addWidget(OutputSplitter)
 
 		Splitter.setSizes([20,80])
-		InputSplitter.setSizes([1,1000,1000,1])
+		InputSplitter.setSizes([1000,1000,1])
 		OutputSplitter.setSizes([100,0])
 
 		self.setCentralWidget(Splitter)

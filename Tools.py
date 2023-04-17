@@ -9,8 +9,9 @@ class Search_Tool(QT_Line_Editor):
 		self.setPlaceholderText("Search")
 
 class Outliner_Tool(QT_Tree):
-	def __init__(self, Log: QT_Text_Stream, Output: "Output_Tool"):
+	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
 		super().__init__()
+		self.App = App
 		self.Log = Log
 		self.Output = Output
 
@@ -23,7 +24,7 @@ class Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
 			cur.execute(Item.Query)
@@ -71,8 +72,9 @@ class Outliner_Tool(QT_Tree):
 						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
 
 class Admin_Outliner_Tool(QT_Tree):
-	def __init__(self, Log: QT_Text_Stream, Output: "Output_Tool"):
+	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
 		super().__init__()
+		self.App = App
 		self.Log = Log
 		self.Output = Output
 
@@ -85,7 +87,7 @@ class Admin_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 
 		cur = conn.cursor()
 		try:
@@ -134,8 +136,9 @@ class Admin_Outliner_Tool(QT_Tree):
 						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
 
 class Premade_Outliner_Tool(QT_Tree):
-	def __init__(self, Log: QT_Text_Stream, Output: "Output_Tool"):
+	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
 		super().__init__()
+		self.App = App
 		self.Log = Log
 		self.Output = Output
 
@@ -148,7 +151,7 @@ class Premade_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
-		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
 			cur.execute(Item.Query)
@@ -200,8 +203,9 @@ class Log_Tool(QT_Text_Stream):
 		super().__init__()
 
 class Input_Tool(QT_Linear_Contents):
-	def __init__(self, Output, Table_Name, Log):
+	def __init__(self, App, Output, Table_Name, Log):
 		super().__init__()
+		self.App = App
 		self.Output = Output
 		self.Log = Log
 		self.Table_Name = Table_Name
@@ -278,7 +282,8 @@ class Input_Tool(QT_Linear_Contents):
 		self.destroy()
 
 class Output_Tool(QT_Linear_Contents):
-	def __init__(self, Log):
+	def __init__(self, App, Log):
+		self.App = App
 		super().__init__()
 		self.Spreadsheet = QT_Spreadsheet()
 		self.Log = Log
@@ -297,7 +302,7 @@ class Output_Tool(QT_Linear_Contents):
 		Add_Button.clicked.connect(self.input)
 
 	def input(self):
-		self.Input = Input_Tool(self, self.Table_Name, self.Log)
+		self.Input = Input_Tool(self.App, self, self.Table_Name, self.Log)
 
 	def updateDatabase(self, row, column):
 		if not self.Set:
@@ -317,7 +322,7 @@ class Output_Tool(QT_Linear_Contents):
 			DB_connector.close()
 
 	def refresh(self):
-		conn = psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
+		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
 			cur.execute(self.Query)
