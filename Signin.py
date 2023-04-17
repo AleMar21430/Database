@@ -33,13 +33,13 @@ class Signin_Window(QT_Window):
 
 	def signIn(self):
 		if self.Username.text() != "" and self.Password.text() != "":
-			conn = sqlite3.connect("neurochama.db")
+			conn = sqlite3.connect("neurochama.db") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 			cur = conn.cursor()
 
 			try:
 				cur.execute("SELECT * FROM Credenciales")
 				rows = cur.fetchall()
-			except sqlite3.Error as Error:
+			except sqlite3.Error as Error: # except psycopg2.Error
 				Toast = QT_Toast(str(Error), self.mapToGlobal(self.Signup.pos()))
 
 			conn.close()

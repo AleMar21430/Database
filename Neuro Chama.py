@@ -79,11 +79,11 @@ class Main_Application(QT_Application):
 		sys.exit(self.exec())
 
 	def start(self):
-		conn = sqlite3.connect("neurochama.db")
+		conn = sqlite3.connect("neurochama.db") # psycopg2.connect(database="proyecto2neuro", user="postgres", password="123", host="localhost", port="5432")
 		cursor = conn.cursor()
 		for Queries in open("Db_Create.txt").read().split(";"):
 			try: cursor.execute(Queries)
-			except sqlite3.Error as Error: QT_Toast(Error)
+			except sqlite3.Error as Error: QT_Toast(Error) # except psycopg2.Error
 		conn.commit()
 		conn.close()
 
