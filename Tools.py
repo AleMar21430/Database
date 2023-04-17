@@ -119,8 +119,15 @@ class Admin_Outliner_Tool(QT_Tree):
 		conn.close()
 
 	def setTree(self):
-		with open("Db_GUI_Admin_Create.txt", "r", encoding = "utf-8") as File:
-			for Tables in File.read().split("+"):
+		with open("Db_GUI_Create.txt", "r", encoding = "utf-8") as File:
+			Pre = File.read()
+			Pre += '''+Credenciales|credenciales
+ID|id
+Usuario|usuario
+Contraseña|contrasenia
+Tipo|tipo
+-'''
+			for Tables in Pre.split("+"):
 				Table_Info = []
 				for Line in Tables.split("\n"):
 					try:
@@ -385,25 +392,15 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 
 	def changeSource(self):
-		if self.Options.currentText() == "DB_Creation":
+		if self.Options.currentText() == "DB Creation Queries":
 			self.Path = "./Db_Create.txt"
-		elif self.Options.currentText() == "DB_Admin_Tree":
+		elif self.Options.currentText() == "DB Tree":
 			self.Path = "./Db_GUI_Create.txt"
-		elif self.Options.currentText() == "DB_User_Tree":
-			self.Path = "./Db_GUI_Create.txt"
-		elif self.Options.currentText() == "DB_User_Custom_Ops":
+		elif self.Options.currentText() == "DB User Custom Ops":
 			self.Path = "./Db_GUI_Custom.txt"
 		self.save()
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
-		self.Text.appendPlainText('''
-		+Credenciales|credenciales
-		ID|id
-		Usuario|usuario
-		Contraseña|contrasenia
-		Tipo|tipo
-		-
-		''')
 
 	def save(self):
 		Confirmation = QT_Confirmation(self,"Are you sure you want to SAVE THE PARAMETERS")
