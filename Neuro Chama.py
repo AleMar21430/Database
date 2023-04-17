@@ -105,12 +105,13 @@ class Main_Application(QT_Application):
 			except: pass
 			self.Window = Signin_Window(self)
 		except Exception as Error:
-			print("Initial Error "+str(Error))
+			print("Initial Error " + str(Error))
 			self.Window = Startup_Window(self)
 
 	def startTry(self):
 		conn = psycopg2.connect(user=self.USER, password=self.PASSWORD)
 		cursor = conn.cursor()
+
 		autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
 		conn.set_isolation_level( autocommit )
 
@@ -118,6 +119,7 @@ class Main_Application(QT_Application):
 			cursor.execute(f"CREATE DATABASE {self.DB}")
 		except Exception as Error:
 			print(Error)
+
 		conn.commit()
 		cursor.close()
 		conn.close()
