@@ -29,7 +29,7 @@ class User_Window(QT_Window):
 		Splitter.addWidget(InputSplitter)
 		Splitter.addWidget(OutputSplitter)
 
-		Splitter.setSizes([20,80])
+		Splitter.setSizes([2000,8000])
 		InputSplitter.setSizes([1000,1000,1])
 		OutputSplitter.setSizes([100,0])
 

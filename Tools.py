@@ -254,7 +254,9 @@ class Input_Tool(QT_Linear_Contents):
 
 		self.setWindowTitle("Input")
 		self.setWindowIcon(QIcon("Icon.jpg"))
-		self.showMaximized()
+		self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.CustomizeWindowHint)
+		self.show()
+		self.setGeometry(QRect(self.Output.mapToGlobal(self.Output.geometry().topLeft()),QSize(self.Output.size().width(), 150)))
 
 	def commit(self):
 		DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
@@ -377,6 +379,9 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		Header.Layout.addWidget(self.Options)
 		Header.Layout.addWidget(Save)
 		Header.Layout.addWidget(Wipe)
+		Header.Layout.setStretch(0,1)
+		Header.Layout.setStretch(1,1)
+		Header.Layout.setStretch(2,1)
 
 		self.Layout.addWidget(Header)
 		self.Layout.addWidget(self.Text)
