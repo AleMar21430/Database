@@ -393,7 +393,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Path = "./Db_GUI_Create.txt"
 		elif self.Options.currentText() == "DB_User_Custom_Ops":
 			self.Path = "./Db_GUI_Custom.txt"
-
+		self.save()
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 		self.Text.appendPlainText('''
