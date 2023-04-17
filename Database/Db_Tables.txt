@@ -1,97 +1,97 @@
-Médico|medico
-ID|id
-Nombres|nombre
-Apellidos|apellido
-Teléfono|telefono
-Dirección|direccion
-Numero Colegiado|numero_colegiado
-Especialidad|especialidad
+Médico|medico~
+ID|id~
+Nombres|nombre~
+Apellidos|apellido~
+Teléfono|telefono~
+Dirección|direccion~
+Numero Colegiado|numero_colegiado~
+Especialidad|especialidad~
 -
-+Paciente|paciente
-ID|id
-Nombres|nombre
-Apellidos|apellido
-Teléfono|telefono
-Direccion|direccion
-Peso|id peso
-Altura|altura
-IMC|imc
++Paciente|paciente~
+ID|id~
+Nombres|nombre~
+Apellidos|apellido~
+Teléfono|telefono~
+Direccion|direccion~
+Peso|id peso~
+Altura|altura~
+IMC|imc~
 -
-+Precedentes del Paciente|precedentes_paciente
-ID|id
-ID del Paciente|paciente_id
-Precedentes de Enfermedad|precedentes_enfermedad
++Precedentes del Paciente|precedentes_paciente~
+ID|id~
+ID del Paciente|paciente_id~
+Precedentes de Enfermedad|precedentes_enfermedad~
 -
-+Adicción|adiccion
-ID|id
-ID del Paciente|paciente_id
-Nombre de la Adicción|nombre
-Descripción|descripcion
++Adicción|adiccion~
+ID|id~
+ID del Paciente|paciente_id~
+Nombre de la Adicción|nombre~
+Descripción|descripcion~
 -
-+Examen|examen
-ID|id
-ID del Paciente|paciente_id
-Nombre del Paciente|nombre
++Examen|examen~
+ID|id~
+ID del Paciente|paciente_id~
+Nombre del Paciente|nombre~
 -
-+Enfermedad|enfermedad
-ID|id
-ID del Paciente|paciente_id
-Nombre de la Enfermedad|nombre
++Enfermedad|enfermedad~
+ID|id~
+ID del Paciente|paciente_id~
+Nombre de la Enfermedad|nombre~
 -
-+Cirugía|cirugia
-ID|id
-ID del Paciente|paciente_id
-Nombre de la Cirugía|nombre
++Cirugía|cirugia~
+ID|id~
+ID del Paciente|paciente_id~
+Nombre de la Cirugía|nombre~
 -
-+Afección|afeccion
-ID|id
-Organo Afectado|organo_afectado
++Afección|afeccion~
+ID|id~
+Organo Afectado|organo_afectado~
 -
-+Medicamento|medicamento
-ID|id
-Nombre del Medicamento|nombre
-Descripción|descripcion
-ID de la Afección|affecion_id
++Medicamento|medicamento~
+ID|id~
+Nombre del Medicamento|nombre~
+Descripción|descripcion~
+ID de la Afección|affecion_id~
 -
-+Centro de Salud|centro_salud
-ID|id
-Nombre del Centro|nombre
-Localización|localizacion
-ID del Medicamento|medicamento_id
++Centro de Salud|centro_salud~
+ID|id~
+Nombre del Centro|nombre~
+Localización|localizacion~
+ID del Medicamento|medicamento_id~
 -
-+Inventario|inventario
-ID|id
-ID del Centro de Salud|centro_salud_id
-ID del medicamento|medicamento_id
-Porcentaje de vencimiento|porcentaje_por_vencer
-Cantidad en existencia|cantidad_existencias
++Inventario|inventario~
+ID|id~
+ID del Centro de Salud|centro_salud_id~
+ID del medicamento|medicamento_id~
+Porcentaje de vencimiento|porcentaje_por_vencer~
+Cantidad en existencia|cantidad_existencias~
 -
-+Trabajo|trabajo
-ID|id
-Fecha de Ingreso|fecha_entarada
-Fecha de Salida|fecha_salida
-ID del Médico|medico_id
-ID del Centro|centro_salud_id
++Trabajo|trabajo~
+ID|id~
+Fecha de Ingreso|fecha_entarada~
+Fecha de Salida|fecha_salida~
+ID del Médico|medico_id~
+ID del Centro|centro_salud_id~
 -
-+Historial Médico|historial_medico
-ID|id
-Fecha|fecha
-Diagnóstico|diagnostico
-Tratamiento|tratamiento
-Observaciones|observaciones
-Estado|status
-ID del Médico Tratante|medico_id
-ID del Paciente|paciente_id
-ID del Centro de Salud|centro_salud_id
++Historial Médico|historial_medico~
+ID|id~
+Fecha|fecha~
+Diagnóstico|diagnostico~
+Tratamiento|tratamiento~
+Observaciones|observaciones~
+Estado|status~
+ID del Médico Tratante|medico_id~
+ID del Paciente|paciente_id~
+ID del Centro de Salud|centro_salud_id~
 -
-+Historial Médico|bitacora_historial_medico
-ID|id
-Acción|accion
-Fecha y Hora|fecha_hora
-Tabla Afectada|tabla_afectada
-ID Afectado|id_afectado
-Columna Afectada|columna_afectada
-Valor Anterior|valor_anterior
-Valor Nuevo|valor_nuevo
-Usuario|usuario
++Historial Médico|bitacora_historial_medico~
+ID|id~
+Acción|accion~
+Fecha y Hora|fecha_hora~
+Tabla Afectada|tabla_afectada~
+ID Afectado|id_afectado~
+Columna Afectada|columna_afectada~
+Valor Anterior|valor_anterior~
+Valor Nuevo|valor_nuevo~
+Usuario|usuario~
 -

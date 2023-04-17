@@ -64,18 +64,22 @@ class Outliner_Tool(QT_Tree):
 		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
 			for Tables in File.read().split("+"):
 				Table_Info = []
-				for Line in Tables.split("\n"):
-					try:
-						if Line[0] != "-":
-							Table_Info.append(Line)
-					except: pass
+				for Line in Tables.split("~"):
+					if Line.strip() != "-":
+						Table_Info.append(Line)
 				for i in range(len(Table_Info)):
 					if i == 0:
 						Parent = Table_Info[i].split('|')
-						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','SELECT * FROM {Parent[1]}','{Parent[1]}','{Parent[1]}')")
+						Parent0 = Parent[0].replace("\n", " ")
+						Parent1 = Parent[1].replace("\n", " ")
+						exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
 					else:
 						Child = Table_Info[i].split('|')
-						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT id, {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
+						Parent0 = Parent[0].replace("\n", " ")
+						Parent1 = Parent[1].replace("\n", " ")
+						Child0 = Child[0].replace("\n", " ")
+						Child1 = Child[1].replace("\n", " ")
+						exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
 
 class Admin_Outliner_Tool(QT_Tree):
 	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
@@ -133,26 +137,30 @@ class Admin_Outliner_Tool(QT_Tree):
 	def setTree(self):
 		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
 			Pre = File.read()
-			Pre += '''+Credenciales|credenciales
-ID|id
-Usuario|usuario
-Contraseña|contrasenia
-Tipo|tipo
+			Pre += '''+Credenciales|credenciales~
+ID|id~
+Usuario|usuario~
+Contraseña|contrasenia~
+Tipo|tipo~
 -'''
 			for Tables in Pre.split("+"):
 				Table_Info = []
-				for Line in Tables.split("\n"):
-					try:
-						if Line[0] != "-":
-							Table_Info.append(Line)
-					except: pass
+				for Line in Tables.split("~"):
+					if Line.strip() != "-":
+						Table_Info.append(Line)
 				for i in range(len(Table_Info)):
 					if i == 0:
 						Parent = Table_Info[i].split('|')
-						exec(f"{Parent[1]} = QT_Tree_Item(self,'{Parent[0]}','SELECT * FROM {Parent[1]}','{Parent[1]}','{Parent[1]}')")
+						Parent0 = Parent[0].replace("\n", " ")
+						Parent1 = Parent[1].replace("\n", " ")
+						exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
 					else:
 						Child = Table_Info[i].split('|')
-						exec(f"QT_Tree_Item({Parent[1]},'{Child[0]}','SELECT id, {Child[1]} FROM {Parent[1]}','{Child[1]}','{Parent[1]}')")
+						Parent0 = Parent[0].replace("\n", " ")
+						Parent1 = Parent[1].replace("\n", " ")
+						Child0 = Child[0].replace("\n", " ")
+						Child1 = Child[1].replace("\n", " ")
+						exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
 
 class Premade_Outliner_Tool(QT_Tree):
 	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
