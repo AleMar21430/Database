@@ -1,8 +1,10 @@
 ﻿from Signin import *
 from Signup import *
+from Startup import *
 from Admin import Admin_Window
 from User import User_Window
 import psycopg2
+from psycopg2 import extensions
 import sys
 
 Style = '''*, *::section {
@@ -73,27 +75,44 @@ QPlainTextEdit {
 class Main_Application(QT_Application):
 	def __init__(self):
 		super().__init__(sys.argv)
-
+		self.setStyleSheet(Style)
 		self.start()
-
 		sys.exit(self.exec())
 
 	def start(self):
-		self.DB = "p2"
-		self.USER = "postgres"
-		self.PASSWORD = "123456"
+		try:
+			self.DB = "p2neuro"
+			self.USER = "postgres"
+			self.PASSWORD = "123"
+			conn = psycopg2.connect(database=self.DB, user=self.USER, password=self.PASSWORD, host="localhost", port="5432")
+			cursor = conn.cursor()
+			for Queries in open("Db_Create.txt").read().split(";"):
+				try: cursor.execute(Queries)
+				except psycopg2.Error as Error: print(Error)
+			conn.commit()
+			cursor.close()
+			conn.close()
+			try: self.Window.close()
+			except: pass
+			self.Window = Signin_Window(self)
+		except psycopg2.Error as Error:
+			print("Initial Error "+str(Error))
+			self.Window = Startup_Window(self)
 
-		conn = psycopg2.connect(database=self.DB, user=self.USER, password=self.PASSWORD, host="localhost", port="5432")
+	def startTry(self):
+		conn = psycopg2.connect(user=self.USER, password=self.PASSWORD)
 		cursor = conn.cursor()
-		for Queries in open("Db_Create.txt").read().split(";"):
-			try: cursor.execute(Queries)
-			except psycopg2.Error as Error: print(Error)
+		autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
+		conn.set_isolation_level( autocommit )
+
+		try:
+			cursor.execute(f"CREATE DATABASE {self.DB}")
+		except psycopg2.Error as Error:
+			print(Error)
 		conn.commit()
+		cursor.close()
 		conn.close()
-		try: self.Window.close()
-		except: pass
-		self.Window = Signin_Window(self)
-		self.setStyleSheet(Style)
+		self.start()
 
 	def signIn(self):
 		self.Window = Signin_Window(self)
