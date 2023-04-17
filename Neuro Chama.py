@@ -95,7 +95,7 @@ class Main_Application(QT_Application):
 				except psycopg2.Error as Error: print(Error)
 			conn.commit()
 
-			try: cursor.execute(open("./Database/Db_Info.txt").read())
+			try: cursor.execute(open("./Database/Db_Triggers.txt").read())
 			except psycopg2.Error as Error: print(Error)
 			conn.commit()
 

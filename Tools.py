@@ -464,6 +464,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		self.Options.addItem("DB_Creation_Queries")
 		self.Options.addItem("DB_Tree")
 		self.Options.addItem("DB_Queries")
+		self.Options.addItem("DB_Triggers")
 
 		Header = QT_Linear_Contents(False)
 
@@ -493,6 +494,8 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Path = "./Database/Db_Tables.txt"
 		elif self.Options.currentText() == "DB_Queries":
 			self.Path = "./Database/Db_Queries.txt"
+		elif self.Options.currentText() == "DB_Triggers":
+			self.Path = "./Database/Db_Triggers.txt"
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 
