@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS Historial_Medico(
 
 CREATE TABLE IF NOT EXISTS Credenciales (
 	id SERIAL PRIMARY KEY UNIQUE,
-	usuario TEXT,
+	usuario TEXT UNIQUE,
 	contrasenia TEXT,
 	tipo TEXT
 );
