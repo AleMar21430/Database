@@ -49,7 +49,7 @@ class Outliner_Tool(QT_Tree):
 			self.Output.Spreadsheet.resizeRowsToContents()
 			self.Output.Set = False
 
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -131,7 +131,7 @@ class Admin_Outliner_Tool(QT_Tree):
 			self.Output.Spreadsheet.resizeRowsToContents()
 			self.Output.Set = False
 
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -215,7 +215,7 @@ class Premade_Outliner_Tool(QT_Tree):
 				self.Output.Spreadsheet.resizeRowsToContents()
 				self.Output.Set = False
 
-			except psycopg2.Error as Error:
+			except Exception as Error:
 				self.Log.append("Error: " + str(Error),"250,50,50")
 
 			self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -267,7 +267,7 @@ class Input_Tool(QT_Linear_Contents):
 		try:
 			DB_cursor.execute(f"SELECT * FROM {Table_Name}")
 			DB_connector.commit()
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 		Data = DB_cursor.fetchall()
 		self.Coulmn_Labels = [str(desc[0]) for desc in DB_cursor.description][1:] # Ignore PK id
@@ -341,7 +341,7 @@ class Input_Tool(QT_Linear_Contents):
 			self.Output.refresh()
 			self.quit()
 
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 	def quit(self):
@@ -388,7 +388,7 @@ class Delete_Tool(QT_Linear_Contents):
 		try:
 			DB_cursor.execute(f"DELETE FROM {self.Table_Name} WHERE id = {self.Id.text()}")
 			DB_connector.commit()
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		DB_connector.close()
@@ -447,7 +447,7 @@ class Output_Tool(QT_Linear_Contents):
 				else:
 					DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = {self.Spreadsheet.item(row,column).text()} WHERE id = {self.Spreadsheet.item(row,0).text()}")
 				DB_connector.commit()
-			except psycopg2.Error as Error:
+			except Exception as Error:
 				self.Log.append("Error: " + str(Error),"250,50,50")
 
 			DB_connector.close()
@@ -474,7 +474,7 @@ class Output_Tool(QT_Linear_Contents):
 			self.Spreadsheet.resizeRowsToContents()
 			self.Set = False
 
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		cur.close()
@@ -558,7 +558,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			cur = conn.cursor()
 
 			try: cur.execute(open(Path[0], "r",encoding=chardet.detect(open(Path[0], 'rb').read())["encoding"]).read())
-			except psycopg2.Error as Error: self.Log.append("Error: " + str(Error),"250,50,50")
+			except Exception as Error: self.Log.append("Error: " + str(Error),"250,50,50")
 			conn.commit()
 			cur.close()
 			conn.close()
@@ -574,7 +574,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			conn.set_isolation_level( autocommit )
 
 			try: cursor.execute(f"DROP DATABASE {self.Parent.App.DB}")
-			except psycopg2.Error as Error: print(Error)
+			except Exception as Error: print(Error)
 			conn.commit()
 			cursor.close()
 			conn.close()

@@ -92,11 +92,11 @@ class Main_Application(QT_Application):
 
 			for Queries in open("./Database/Db_Create.txt").read().split(";"):
 				try: cursor.execute(Queries)
-				except psycopg2.Error as Error: print(Error)
+				except Exception as Error: print(Error)
 			conn.commit()
 
 			try: cursor.execute(open("./Database/Db_Triggers.txt").read())
-			except psycopg2.Error as Error: print(Error)
+			except Exception as Error: print(Error)
 			conn.commit()
 
 			cursor.close()
@@ -104,7 +104,7 @@ class Main_Application(QT_Application):
 			try: self.Window.close()
 			except: pass
 			self.Window = Signin_Window(self)
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			print("Initial Error "+str(Error))
 			self.Window = Startup_Window(self)
 
@@ -116,7 +116,7 @@ class Main_Application(QT_Application):
 
 		try:
 			cursor.execute(f"CREATE DATABASE {self.DB}")
-		except psycopg2.Error as Error:
+		except Exception as Error:
 			print(Error)
 		conn.commit()
 		cursor.close()
