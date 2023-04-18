@@ -277,7 +277,6 @@ class Input_Tool(QT_Linear_Contents):
 
 		self.Spreadsheet.setColumnCount(len(self.Coulmn_Labels))
 		self.Spreadsheet.setHorizontalHeaderLabels(self.Coulmn_Labels)
-		self.Columns = self.Coulmn_Labels
 		self.Spreadsheet.setRowCount(1)
 
 		DB_connector.close()
@@ -310,7 +309,7 @@ class Input_Tool(QT_Linear_Contents):
 		DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 		DB_cursor = DB_connector.cursor()
 		Data = []
-		for i in range(len(self.Columns)):
+		for i in range(len(self.Coulmn_Labels)):
 			try:
 				if self.Spreadsheet.item(0,i).text() == "''":
 					Data.append("null")
@@ -319,7 +318,6 @@ class Input_Tool(QT_Linear_Contents):
 				
 			except:
 				Data.append("null")
-
 		try:
 			column_type = []
 			Info = [f"{item}" for item in Data]
@@ -331,8 +329,11 @@ class Input_Tool(QT_Linear_Contents):
 					Info[i] = f"'{Info[i]}'"
 				elif column_type[i] == "date":
 					Info[i] = f"TO_DATE('{Info[i]}', 'YYYY-MM-DD')"
+			DB_cursor.execute(f"SELECT MAX(id) FROM {self.Table_Name};")
+			DB_connector.commit()
+			key = DB_cursor.fetchone()[0] + 1
 
-			DB_cursor.execute(f"INSERT INTO {self.Table_Name} ({','.join(self.Columns)}) VALUES ({','.join(Info)})")
+			DB_cursor.execute(f"INSERT INTO {self.Table_Name} (id, {','.join(self.Coulmn_Labels)}) VALUES ({key}, {','.join(Info)})")
 			DB_connector.commit()
 			
 			self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
@@ -341,14 +342,13 @@ class Input_Tool(QT_Linear_Contents):
 				flags = item.flags()
 				flags &= Qt.ItemFlag.ItemIsEditable
 				item.setFlags(flags)
-
-			DB_connector.close()
-			self.Output.Set = False
-			self.Output.refresh()
-			self.quit()
-
 		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
+
+		DB_connector.close()
+		self.Output.Set = False
+		self.Output.refresh()
+		self.quit()
 
 	def quit(self):
 		self.close()

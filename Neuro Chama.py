@@ -109,7 +109,7 @@ class Main_Application(QT_Application):
 			self.Window = Startup_Window(self)
 
 	def startTry(self):
-		conn = psycopg2.connect(database="postgres", user=self.USER, password=self.PASSWORD, host="localhost", port="5432")
+		conn = psycopg2.connect(user=self.USER, password=self.PASSWORD, host="localhost", port="5432")
 		cursor = conn.cursor()
 
 		autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
