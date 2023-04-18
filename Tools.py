@@ -26,6 +26,7 @@ class Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
+		self.Output.Set = True
 		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 		cur = conn.cursor()
 		try:
@@ -33,7 +34,6 @@ class Outliner_Tool(QT_Tree):
 			conn.commit()
 			self.Data = cur.fetchall()
 			Coulmn_Labels = [str(desc[0]) for desc in cur.description]
-			self.Output.Set = True
 			self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
 			self.Output.Spreadsheet.setRowCount(len(self.Data))
 			self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
@@ -47,7 +47,6 @@ class Outliner_Tool(QT_Tree):
 
 			self.Output.Spreadsheet.resizeColumnsToContents()
 			self.Output.Spreadsheet.resizeRowsToContents()
-			self.Output.Set = False
 
 		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
@@ -60,6 +59,7 @@ class Outliner_Tool(QT_Tree):
 			item.setFlags(flags)
 		cur.close()
 		conn.close()
+		self.Output.Set = False
 
 	def setTree(self):
 		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
@@ -107,15 +107,14 @@ class Admin_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
+		self.Output.Set = True
 		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
-
 		cur = conn.cursor()
 		try:
 			cur.execute(Item.Query)
 			conn.commit()
 			self.Data = cur.fetchall()
 			Coulmn_Labels = [str(desc[0]) for desc in cur.description]
-			self.Output.Set = True
 			self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
 			self.Output.Spreadsheet.setRowCount(len(self.Data))
 			self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
@@ -129,7 +128,6 @@ class Admin_Outliner_Tool(QT_Tree):
 
 			self.Output.Spreadsheet.resizeColumnsToContents()
 			self.Output.Spreadsheet.resizeRowsToContents()
-			self.Output.Set = False
 
 		except Exception as Error:
 			self.Log.append("Error: " + str(Error),"250,50,50")
@@ -142,6 +140,7 @@ class Admin_Outliner_Tool(QT_Tree):
 			item.setFlags(flags)
 		cur.close()
 		conn.close()
+		self.Output.Set = False
 
 	def setTree(self):
 		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
@@ -191,6 +190,7 @@ class Premade_Outliner_Tool(QT_Tree):
 		self.commit(item)
 
 	def commit(self, Item):
+		self.Output.Set = True
 		if Item.Query != "Pass":
 			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()
@@ -199,7 +199,6 @@ class Premade_Outliner_Tool(QT_Tree):
 				conn.commit()
 				self.Data = cur.fetchall()
 				Coulmn_Labels = [str(desc[0]) for desc in cur.description]
-				self.Output.Set = True
 				self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
 				self.Output.Spreadsheet.setRowCount(len(self.Data))
 				self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
@@ -217,10 +216,12 @@ class Premade_Outliner_Tool(QT_Tree):
 
 			except Exception as Error:
 				self.Log.append("Error: " + str(Error),"250,50,50")
+				self.Output.Set = False
 
 			self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 			cur.close()
 			conn.close()
+		self.Output.Set = False
 
 	def setTree(self):
 		File = open("./Database/Db_Queries.txt", "r", encoding = "utf-8").read()
@@ -303,9 +304,9 @@ class Input_Tool(QT_Linear_Contents):
 		self.setGeometry(QRect(self.Output.mapToGlobal(self.Output.geometry().topLeft()),QSize(self.Output.size().width(), 150)))
 
 	def commit(self):
+		self.Output.Set = True
 		DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 		DB_cursor = DB_connector.cursor()
-
 		Data = []
 		for i in range(len(self.Columns)):
 			try:
@@ -340,6 +341,7 @@ class Input_Tool(QT_Linear_Contents):
 				item.setFlags(flags)
 
 			DB_connector.close()
+			self.Output.Set = False
 			self.Output.refresh()
 			self.quit()
 
@@ -376,7 +378,6 @@ class Delete_Tool(QT_Linear_Contents):
 		self.Layout.setStretch(1,0)
 		self.Layout.setStretch(2,0)
 
-
 		self.setWindowTitle("Input")
 		self.setWindowIcon(QIcon("./Resources/Icon.jpg"))
 		self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.CustomizeWindowHint)
@@ -384,6 +385,7 @@ class Delete_Tool(QT_Linear_Contents):
 		self.setGeometry(QRect(self.Output.mapToGlobal(self.Output.geometry().topLeft()),QSize(150, 80)))
 
 	def commit(self):
+		self.Output.Set = True
 		DB_connector = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 		DB_cursor = DB_connector.cursor()
 
@@ -394,6 +396,7 @@ class Delete_Tool(QT_Linear_Contents):
 			self.Log.append("Error: " + str(Error),"250,50,50")
 
 		DB_connector.close()
+		self.Output.Set = False
 		self.Output.refresh()
 		self.quit()
 

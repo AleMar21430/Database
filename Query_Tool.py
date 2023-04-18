@@ -16,6 +16,7 @@ class Query_Tool(QT_Text_Editor):
 			return super().keyPressEvent(event)
 
 	def commit(self):
+		self.Output.Set = True
 		if len(self.textCursor().selectedText()) < 1:
 			conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()
@@ -26,7 +27,6 @@ class Query_Tool(QT_Text_Editor):
 				self.Log.append("Query executed succesfully!","150,250,150")
 				try:
 					Coulmn_Labels = [str(desc[0]) for desc in cur.description]
-					self.Output.Set = True
 					self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
 					self.Output.Spreadsheet.setRowCount(len(self.Data))
 					self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
@@ -38,7 +38,6 @@ class Query_Tool(QT_Text_Editor):
 
 					self.Output.Spreadsheet.resizeColumnsToContents()
 					self.Output.Spreadsheet.resizeRowsToContents()
-					self.Output.Set = False
 					self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 				except Exception as Error:
 					self.Log.append("Nothing to display. " + str(Error),"100,50,50")
@@ -77,3 +76,4 @@ class Query_Tool(QT_Text_Editor):
 			self.Output.refresh()
 			cur.close()
 			conn.close()
+		self.Output.Set = False
