@@ -43,7 +43,6 @@ class Query_Tool(QT_Text_Editor):
 					self.Log.append("Nothing to display. " + str(Error),"100,50,50")
 			except:
 				pass
-			self.Output.refresh()
 			cur.close()
 			conn.close()
 		else:
@@ -73,7 +72,6 @@ class Query_Tool(QT_Text_Editor):
 					self.Log.append("Nothing to display. " + str(Error),"100,50,50")
 			except:
 				pass
-			self.Output.refresh()
 			cur.close()
 			conn.close()
 		self.Output.Set = False
