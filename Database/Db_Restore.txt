@@ -19,11 +19,6 @@ VALUES
 INSERT INTO paciente
 	(id,nombre,apellido,telefono,direccion,peso,altura,imc)
 VALUES
-	(11, 'Pancho', 'Sanchez', 12345678, 'Villa Nueva', 150, 160, 15),
-	(12, 'Juan', 'Fernandez', 12345677, 'Mixco', 135, 170, 17),
-	(13, 'Pepito', 'Gutierrez', 12345676, 'Antigua', 125, 162, 16),
-	(14, 'Mincho', 'El Chino', 12345675, 'Villa Nueva', 350, 160, 40),
-	(15, 'Miguel', 'Pako', 12345674, 'Jutiapa', 120, 150, 12),
 	(1, 'Roberto', 'Castillo', 23543546, '12-10 zona 13, 2av', 25, 1.68, 20),
 	(2, 'Walter', 'Segura', 49563452, '10-5 zona 12, 5av', 49, 1.7, 19),
 	(3, 'Hugo', 'Paiz', 16731742, '6-8 zona 10, 9av', 95, 1.75, 25),
@@ -33,7 +28,12 @@ VALUES
 	(7, 'Andrés', 'Gonzales', 13426751, '14-5 zona 10, 3av', 69, 1.67, 20),
 	(8, 'Karen', 'Salazar', 81096956, '24-8 zona 17, 9av', 64, 1.82, 20),
 	(9, 'Rafael', 'Carrillo', 45317456, '12-7 zona 8, 6av', 79, 1.8, 25),
-	(10, 'William', 'Bolaños', 43215316, '21-9 zona 14, 4av', 94, 1.8, 27);
+	(10, 'William', 'Bolaños', 43215316, '21-9 zona 14, 4av', 94, 1.8, 27),
+	(11, 'Pancho', 'Sanchez', 12345678, 'Villa Nueva', 150, 160, 15),
+	(12, 'Juan', 'Fernandez', 12345677, 'Mixco', 135, 170, 17),
+	(13, 'Pepito', 'Gutierrez', 12345676, 'Antigua', 125, 162, 16),
+	(14, 'Mincho', 'El Chino', 12345675, 'Villa Nueva', 350, 160, 40),
+	(15, 'Miguel', 'Pako', 12345674, 'Jutiapa', 120, 150, 12);
 
 
 INSERT INTO precedentes_paciente
@@ -43,35 +43,124 @@ VALUES
 	(2, 2, 'No hay antecedentes'),
 	(3, 3, 'No hay antecedentes'),
 	(4, 4, 'Hipertensión, Presión alta, Obesidad'),
-	(5, 5, 'Desnutrición');
+	(5, 8, 'Desnutrición'),
+	(6, 9, 'Hipertensión'),
+	(7, 10, 'No hay antecedentes'),
+	(8, 12, 'No hay antecedentes'),
+	(9, 14, 'Hipertensión, Presión alta, Obesidad'),
+	(10, 15, 'Desnutrición');
 
 INSERT INTO adiccion
 	(id,paciente_id,nombre,descripcion)
 VALUES
 	(1, 1, 'Alcoholico', 'Consume alcohol con mucha frecuencia (2-3)veces al dia.'),
 	(2, 3, 'Narcoticos', 'Consume heroina.'),
-	(3, 4, 'Comer', 'Tiene problemas de ansiedad, esta obeso.');
+	(3, 4, 'Comer', 'Tiene problemas de ansiedad, esta obeso.'),
+	(4, 10, 'Alcoholico', 'Consume alcohol con mucha frecuencia (2-3)veces al dia.'),
+	(5, 10, 'Narcoticos', 'Consume heroina.'),
+	(6, 12, 'Comer', 'Tiene problemas de ansiedad, esta obeso.'),
+	(7, 13, 'Alcoholico', 'Consume alcohol con mucha frecuencia (2-3)veces al dia.'),
+	(8, 15, 'Narcoticos', 'Consume heroina.'),
+	(9, 14, 'Comer', 'Tiene problemas de ansiedad, esta obeso.');
 
 INSERT INTO examen
 	(id,paciente_id,nombre)
 VALUES
 	(1,4,'OCD'),
-	(2,4,'Depresion');
+	(2,4,'Depresion'),
+	(3,2,'Presion Alta'),
+	(4,3,'Dislexia'),
+	(5,1,'OCD'),
+	(6,10,'Depresion'),
+	(7,6,'OCD'),
+	(8,8,'Depresion'),
+	(9,14,'OCD'),
+	(10,12,'Depresion');
+
+INSERT INTO enfermedad
+	(id,paciente_id,nombre)
+VALUES
+	(1,4,'OCD'),
+	(2,3,'Depresion'),
+	(3,2,'Presion Alta'),
+	(4,3,'Dislexia'),
+	(5,5,'OCD'),
+	(6,10,'Depresion'),
+	(7,4,'OCD'),
+	(8,8,'Depresion'),
+	(9,14,'OCD'),
+	(10,12,'Depresion');
+
+INSERT INTO cirugia
+	(id,paciente_id,nombre)
+VALUES
+	(1,4,'bypass'),
+	(2,4,'pierna rota'),
+	(3,2,'brazo roto'),
+	(4,3,'pie roto'),
+	(5,1,'liposuccion'),
+	(6,10,'reconstruccion facial'),
+	(7,6,'amputacion'),
+	(8,8,'dedo roto'),
+	(9,14,'cordales'),
+	(10,12,'pie roto');
 
 INSERT INTO afeccion
 	(id, organo_afectado)
 VALUES
-	(1, 'corazon');
+	(1, 'corazon'),
+	(2, 'cerebro'),
+	(3, 'piel'),
+	(4, 'cerebro'),
+	(5, 'cerebro'),
+	(6, 'estomago');
 
 INSERT INTO medicamento
 	(id,nombre,descripcion,afeccion_id)
 VALUES
-	(1, 'Ramipril', 'Facilita coagulacion', 1);
+	(1, 'Ramipril', 'Facilita coagulacion', 1),
+	(2, 'Zetralina', 'Antidepresivo', 2),
+	(3, 'Minac', 'Acne', 3),
+	(4, 'Cataflam', 'Inflamacion', 4),
+	(5, 'Aspirina', 'Dolor de cabeza', 5),
+	(6, 'Omeprazole', 'Dolor de estomago', 6);
 
 INSERT INTO centro_salud
 	(id,nombre,localizacion)
 VALUES
-	(1, 'Centro medico', 'Zona 11');
+	(1, 'Centro medico', 'Zona 11'),
+	(2, 'Hospital pinulito', 'Zona 12'),
+	(3, 'Roosvelt', 'Zona 10'),
+	(4, 'IGGS', 'Zona 8'),
+	(5, 'Herrera Llerandi', 'Zona 6');
+
+INSERT INTO inventario
+	(centro_salud_id,medicamento_id,porcentaje_por_vencer,cantidad_existencias)
+VALUES
+	(1, 1, 50, 13),
+	(1, 2, 15, 12),
+	(1, 3, 20, 80),
+	(1, 4, 60, 60),
+	(1, 5, 88, 45),
+	(1, 6, 35, 35),
+	(2, 1, 50, 13),
+	(2, 2, 20, 12),
+	(2, 3, 68, 138),
+	(2, 4, 8, 387),
+	(2, 5, 45, 45),
+	(2, 6, 35, 354),
+	(3, 1, 94, 378),
+	(3, 2, 12, 345),
+	(3, 3, 60, 450),
+	(3, 4, 90, 1053),
+	(3, 5, 95, 68),
+	(3, 6, 68, 450),
+	(4, 1, 50, 787),
+	(4, 2, 15, 120),
+	(4, 3, 35, 789),
+	(4, 4, 93, 40),
+	(4, 5, 96, 68),
+	(4, 6, 35, 10);
 
 INSERT INTO historial_medico
 	(fecha,diagnostico,tratamiento,observaciones,status,medico_id,paciente_id,centro_salud_id,medicamento_id)

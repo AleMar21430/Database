@@ -2,21 +2,21 @@ Reportes|reporte|Pass~
 Expedientes de los Pacientes|
 SELECT pac.id, pac.nombre, pac.apellido, pac.telefono, pac.direccion, pac.peso, pac.altura, pac.imc, pre_pac.precedentes_enfermedad, ad.nombre AS nombre_adiccion, enf.nombre AS nombre_enfermedad, cr.nombre AS nombre_cirugia
 FROM paciente pac
-INNER JOIN precedentes_paciente pre_pac
+JOIN precedentes_paciente pre_pac
 ON pac.id = pre_pac.paciente_id
-INNER JOIN adiccion ad
+JOIN adiccion ad
 ON pac.id = ad.paciente_id
-INNER JOIN enfermedad enf
+JOIN enfermedad enf
 ON pac.id = enf.paciente_id
-INNER JOIN cirugia cr
+JOIN cirugia cr
 ON pac.id = cr.paciente_id
 ~
 Medicamentos por vencer|
 SELECT cs.nombre, cs.localizacion, m.nombre, i.cantidad_existencias, ROUND(i.cantidad_existencias * 0.15, 2) AS porcentaje, i.porcentaje_por_vencer AS cantidad_a_vencer
 FROM inventario i
-INNER JOIN medicamento m
+JOIN medicamento m
 ON i.medicamento_id = m.id
-INNER JOIN centro_salud cs
+JOIN centro_salud cs
 ON i.centro_salud_id = cs.id
 WHERE ROUND(i.cantidad_existencias * 0.15, 2) <= 15
 ORDER BY i.cantidad_existencias ASC
