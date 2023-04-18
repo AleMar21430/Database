@@ -13,7 +13,7 @@ GROUP BY hm.diagnostico, hm.status
 ORDER BY COUNT(hm.diagnostico)
 LIMIT 10;
 ~
-Top 10 Médicos Mmás trabajadores|
+Top 10 Médicos más trabajadores|
 SELECT count(historial_medico.medico_id) as conteo, medico.nombre, medico.apellido
 FROM public.historial_medico, public.medico
 WHERE historial_medico.medico_id = medico.id
