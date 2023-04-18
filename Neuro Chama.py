@@ -113,7 +113,7 @@ class Main_Application(QT_Application):
 		cursor = conn.cursor()
 
 		autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
-		conn.set_isolation_level( autocommit )
+		conn.set_isolation_level(autocommit)
 
 		try:
 			cursor.execute(f"CREATE DATABASE {self.DB}")
