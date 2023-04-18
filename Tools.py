@@ -10,9 +10,10 @@ class Search_Tool(QT_Line_Editor):
 		self.setPlaceholderText("Search")
 
 class Outliner_Tool(QT_Tree):
-	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
+	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool", Admin = False):
 		super().__init__()
 		self.App = App
+		self.Admin = Admin
 		self.Log = Log
 		self.Output = Output
 
@@ -63,124 +64,44 @@ class Outliner_Tool(QT_Tree):
 		self.Output.Set = False
 
 	def setTree(self):
-		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
-			for Tables in File.read().split("+"):
-				Table_Info = []
-				for Line in Tables.split("~"):
-					if Line.strip() != "-":
-						Table_Info.append(Line)
-				for i in range(len(Table_Info)):
-					if i == 0:
-						try:
-							Parent = Table_Info[i].split('|')
-							Parent0 = Parent[0].replace("\n", " ")
-							Parent1 = Parent[1].replace("\n", " ")
-							exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
-						except Exception as Error:
-							print(Error)
-							self.Log.append("Error: " + str(Error),"250,50,50")
-					else:
-						try:
-							Child = Table_Info[i].split('|')
-							Parent0 = Parent[0].replace("\n", " ")
-							Parent1 = Parent[1].replace("\n", " ")
-							Child0 = Child[0].replace("\n", " ")
-							Child1 = Child[1].replace("\n", " ")
-							exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
-						except Exception as Error:
-							print(Error)
-							self.Log.append("Error: " + str(Error),"250,50,50")
+		File = open("./Database/Db_Tables.txt", "r", encoding = "utf-8").read()
+		if self.Admin:
+			File += open("./Database/Db_Admin_Credentials.txt", "r", encoding = "utf-8").read()
+		for Tables in File.split("+"):
+			Table_Info = []
+			for Line in Tables.split("~"):
+				if Line.strip() != "-":
+					Table_Info.append(Line)
+			for i in range(len(Table_Info)):
+				if i == 0:
+					try:
+						Parent = Table_Info[i].split('|')
+						Parent0 = Parent[0].replace("\n", " ")
+						Parent1 = Parent[1].replace("\n", " ")
+						exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
+					except Exception as Error:
+						print(Error)
+						self.Log.append("Error: " + str(Error),"250,50,50")
+				else:
+					try:
+						Child = Table_Info[i].split('|')
+						Parent0 = Parent[0].replace("\n", " ")
+						Parent1 = Parent[1].replace("\n", " ")
+						Child0 = Child[0].replace("\n", " ")
+						Child1 = Child[1].replace("\n", " ")
+						exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
+					except Exception as Error:
+						print(Error)
+						self.Log.append("Error: " + str(Error),"250,50,50")
 
-class Admin_Outliner_Tool(QT_Tree):
-	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool"):
-		super().__init__()
-		self.App = App
-		self.Log = Log
-		self.Output = Output
-
-		self.setTree()
-		self.itemDoubleClicked.connect(self.itemSelect)
-
-	def itemSelect(self, item):
-		self.Output.Add_Button.show()
-		if self.Output.Admin:
-			self.Output.Remove_Button.show()
-		item.setExpanded(False)
-		self.commit(item)
-
-	def commit(self, Item):
-		self.Output.Set = True
-		conn = psycopg2.connect(database=self.App.DB, user=self.App.USER, password=self.App.PASSWORD, host="localhost", port="5432")
-		cur = conn.cursor()
-		try:
-			cur.execute(Item.Query)
-			conn.commit()
-			self.Data = cur.fetchall()
-			Coulmn_Labels = [str(desc[0]) for desc in cur.description]
-			self.Output.Spreadsheet.setColumnCount(len(Coulmn_Labels))
-			self.Output.Spreadsheet.setRowCount(len(self.Data))
-			self.Output.Spreadsheet.setHorizontalHeaderLabels(Coulmn_Labels)
-			self.Output.Table_Name = Item.Table_Name
-			self.Output.Query = Item.Query
-
-			for row in range(len(self.Data)):
-				for column in range(len(self.Data[0])):
-					item = QTableWidgetItem(str(self.Data[row][column]))
-					self.Output.Spreadsheet.setItem(row, column, item)
-
-			self.Output.Spreadsheet.resizeColumnsToContents()
-			self.Output.Spreadsheet.resizeRowsToContents()
-
-		except Exception as Error:
-			self.Log.append("Error: " + str(Error),"250,50,50")
-
-		self.Output.Spreadsheet.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
-		for row in range(self.Output.Spreadsheet.rowCount()):
-			item = self.Output.Spreadsheet.item(row, 0)
-			flags = item.flags()
-			flags &= Qt.ItemFlag.ItemIsEditable
-			item.setFlags(flags)
-		cur.close()
-		conn.close()
-		self.Output.Set = False
-
-	def setTree(self):
-		with open("./Database/Db_Tables.txt", "r", encoding = "utf-8") as File:
-			Pre = File.read()
-			for Tables in Pre.split("+"):
-				Table_Info = []
-				for Line in Tables.split("~"):
-					if Line.strip() != "-":
-						Table_Info.append(Line)
-				for i in range(len(Table_Info)):
-					if i == 0:
-						try:
-							Parent = Table_Info[i].split('|')
-							Parent0 = Parent[0].replace("\n", " ")
-							Parent1 = Parent[1].replace("\n", " ")
-							exec(f"{Parent1} = QT_Tree_Item(self,'{Parent0}','SELECT * FROM {Parent1}','{Parent1}','{Parent1}')")
-						except Exception as Error:
-							print(Error)
-							self.Log.append("Error: " + str(Error),"250,50,50")
-					else:
-						try:
-							Child = Table_Info[i].split('|')
-							Parent0 = Parent[0].replace("\n", " ")
-							Parent1 = Parent[1].replace("\n", " ")
-							Child0 = Child[0].replace("\n", " ")
-							Child1 = Child[1].replace("\n", " ")
-							exec(f"QT_Tree_Item({Parent1},'{Child0}','SELECT id, {Child1} FROM {Parent1}','{Child1}','{Parent1}')")
-						except Exception as Error:
-							print(Error)
-							self.Log.append("Error: " + str(Error),"250,50,50")
 
 class Premade_Outliner_Tool(QT_Tree):
 	def __init__(self, App, Log: QT_Text_Stream, Output: "Output_Tool", Admin = False):
 		super().__init__()
 		self.App = App
+		self.Admin = Admin
 		self.Log = Log
 		self.Output = Output
-		self.Admin = Admin
 
 		self.setTree()
 		self.itemDoubleClicked.connect(self.itemSelect)
@@ -226,9 +147,9 @@ class Premade_Outliner_Tool(QT_Tree):
 		self.Output.Set = False
 
 	def setTree(self):
-		File = open("./Database/Db_Queries.txt", "r", encoding = "utf-8").read()
+		File = open("./Database/Db_User_Reports.txt", "r", encoding = "utf-8").read()
 		if self.Admin:
-			File += open("./Database/Db_Admin.txt", "r", encoding = "utf-8").read()
+			File += open("./Database/Db_Admin_Reports.txt", "r", encoding = "utf-8").read()
 		for Tables in File.split("+"):
 			Table_Info = []
 			for Line in Tables.split("~"):
@@ -510,11 +431,12 @@ class Source_Editor_Tool(QT_Linear_Contents):
 		self.Text = QT_Text_Editor()
 
 		self.Options.addItem("DB_Creation_Queries")
-		self.Options.addItem("DB_Tree")
-		self.Options.addItem("DB_Queries")
+		self.Options.addItem("DB_Populate_Database")
 		self.Options.addItem("DB_Triggers")
-		self.Options.addItem("DB_Admin")
-		self.Options.addItem("DB_Restore")
+		self.Options.addItem("DB_Tree")
+		self.Options.addItem("DB_User_Reports")
+		self.Options.addItem("DB_Admin_Reports")
+		self.Options.addItem("DB_Admin_Credentials")
 
 		Header = QT_Linear_Contents(False)
 
@@ -545,14 +467,16 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Path = "./Database/Db_Create.txt"
 		elif self.Options.currentText() == "DB_Tree":
 			self.Path = "./Database/Db_Tables.txt"
-		elif self.Options.currentText() == "DB_Queries":
-			self.Path = "./Database/Db_Queries.txt"
+		elif self.Options.currentText() == "DB_User_Reports":
+			self.Path = "./Database/Db_User_Reports.txt"
 		elif self.Options.currentText() == "DB_Triggers":
 			self.Path = "./Database/Db_Triggers.txt"
-		elif self.Options.currentText() == "DB_Admin":
-			self.Path = "./Database/Db_Admin.txt"
-		elif self.Options.currentText() == "DB_Restore":
-			self.Path = "./Database/Db_Restore.txt"
+		elif self.Options.currentText() == "DB_Admin_Reports":
+			self.Path = "./Database/Db_Admin_Reports.txt"
+		elif self.Options.currentText() == "DB_Admin_Credentials":
+			self.Path = "./Database/Db_Admin_Credentials.txt"
+		elif self.Options.currentText() == "DB_Populate_Database":
+			self.Path = "./Database/Db_Populate.txt"
 		self.Text.clear()
 		self.Text.setPlainText(open(self.Path,"r",encoding="utf-8").read())
 
@@ -567,7 +491,7 @@ class Source_Editor_Tool(QT_Linear_Contents):
 			self.Parent.Premade_Outliner.setTree()
 
 	def restore(self):
-		Path = QFileDialog.getOpenFileName(self, "Restore from file","./Database/Db_Restore.txt")
+		Path = QFileDialog.getOpenFileName(self, "Restore from file","./Database/Db_Populate.txt")
 		if Path != "":
 			conn = psycopg2.connect(database=self.Parent.App.DB, user=self.Parent.App.USER, password=self.Parent.App.PASSWORD, host="localhost", port="5432")
 			cur = conn.cursor()

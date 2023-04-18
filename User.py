@@ -8,7 +8,6 @@ class User_Window(QT_Window):
 		self.App = App
 		self.Log = Log_Tool()
 		Output = Output_Tool(self.App, self.Log)
-		Search = Search_Tool()
 		Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log, Output)
 		Outliner = Outliner_Tool(self.App, self.Log, Output)
 		Restart = QT_Button()
@@ -17,7 +16,6 @@ class User_Window(QT_Window):
 		Splitter = QT_Splitter(False)
 
 		InputSplitter = QT_Splitter(True)
-		#InputSplitter.addWidget(Search)
 		InputSplitter.addWidget(Premade_Outliner)
 		InputSplitter.addWidget(Outliner)
 		InputSplitter.addWidget(Restart)
