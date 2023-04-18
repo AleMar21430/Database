@@ -7,7 +7,7 @@ class Admin_Window(QT_Window):
 		super().__init__()
 		self.App  = App
 		self.Log = Log_Tool()
-		Output = Output_Tool(self.App, self.Log)
+		Output = Output_Tool(self.App, self.Log,True)
 		self.Outliner = Admin_Outliner_Tool(self.App, self.Log, Output)
 		self.Premade_Outliner = Premade_Outliner_Tool(self.App, self.Log,Output,True)
 		Query = Query_Tool(self.App, self.Log, Output)

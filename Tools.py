@@ -21,7 +21,8 @@ class Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item):
 		self.Output.Add_Button.show()
-		self.Output.Remove_Button.show()
+		if self.Output.Admin:
+			self.Output.Remove_Button.show()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -102,7 +103,8 @@ class Admin_Outliner_Tool(QT_Tree):
 
 	def itemSelect(self, item):
 		self.Output.Add_Button.show()
-		self.Output.Remove_Button.show()
+		if self.Output.Admin:
+			self.Output.Remove_Button.show()
 		item.setExpanded(False)
 		self.commit(item)
 
@@ -406,9 +408,10 @@ class Delete_Tool(QT_Linear_Contents):
 		self.destroy()
 
 class Output_Tool(QT_Linear_Contents):
-	def __init__(self, App, Log):
-		self.App = App
+	def __init__(self, App, Log, Admin = False):
 		super().__init__()
+		self.App = App
+		self.Admin = Admin
 		self.Spreadsheet = QT_Spreadsheet()
 		self.Log = Log
 		self.Table_Name = ""
@@ -420,11 +423,16 @@ class Output_Tool(QT_Linear_Contents):
 		self.Remove_Button.setText("Remove Item")
 
 		self.Layout.addWidget(self.Add_Button)
-		self.Layout.addWidget(self.Remove_Button)
+		if self.Admin:
+			self.Layout.addWidget(self.Remove_Button)
 		self.Layout.addWidget(self.Spreadsheet)
-		self.Layout.setStretch(0,0)
-		self.Layout.setStretch(1,0)
-		self.Layout.setStretch(2,1)
+		if self.Admin:
+			self.Layout.setStretch(0,0)
+			self.Layout.setStretch(1,0)
+			self.Layout.setStretch(2,1)
+		else:
+			self.Layout.setStretch(0,0)
+			self.Layout.setStretch(1,1)
 
 		self.Spreadsheet.cellChanged.connect(self.updateDatabase)
 		self.Add_Button.clicked.connect(self.input)
