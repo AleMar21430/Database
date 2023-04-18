@@ -3,8 +3,8 @@ from Signup import *
 from Startup import *
 from Admin import Admin_Window
 from User import User_Window
-import psycopg2
 from psycopg2 import extensions
+import psycopg2
 import sys
 
 Style = '''*, *::section {

@@ -326,6 +326,8 @@ class Input_Tool(QT_Linear_Contents):
 			for i in range(len(column_type)):
 				if column_type[i] == "text":
 					Info[i] = f"'{Info[i]}'"
+				elif column_type[i] == "date":
+					Info[i] = f"TO_DATE('{Info[i]}', 'YYYY-MM-DD')"
 
 			DB_cursor.execute(f"INSERT INTO {self.Table_Name} ({','.join(self.Columns)}) VALUES ({','.join(Info)})")
 			DB_connector.commit()
@@ -444,6 +446,8 @@ class Output_Tool(QT_Linear_Contents):
 				column_type = DB_cursor.fetchone()[0]
 				if column_type == "text":
 					DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = '{self.Spreadsheet.item(row,column).text()}' WHERE id = {self.Spreadsheet.item(row,0).text()}")
+				elif column_type == "date":
+					DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = TO_DATE('{self.Spreadsheet.item(row,column).text()}', 'YYYY-MM-DD') WHERE id = {self.Spreadsheet.item(row,0).text()}")
 				else:
 					DB_cursor.execute(f"UPDATE {self.Table_Name} SET {Column_Name} = {self.Spreadsheet.item(row,column).text()} WHERE id = {self.Spreadsheet.item(row,0).text()}")
 				DB_connector.commit()
